@@ -1,5 +1,5 @@
 import requests
-import json
+import numpy as np
 
 
 # Function to retrieve a recipe suggestion based on ingredients supplied by the user
@@ -23,13 +23,27 @@ def retrieve_data_Edamam(input_value):
     hits = recipes_data["hits"]
     recipe_names_list = []
 
-    # go though the data to find the names of suggested recipes which are stored under "label"
+    # Go though the data to find the names of suggested recipes which are stored under "label"
     for hit in hits:
         recipe_names_list.append(hit["recipe"]["label"])
         recipe_names_list.append(hit["recipe"]["url"])
 
-    print(recipe_names_list)
-    return recipe_names_list
+    recipe_fat_list = []
+    recipe_sugar_list = []
+
+    for hit in hits:
+        keys = ["FAT", "SUGAR"]
+
+        for key in keys:
+            if key == "FAT":
+                recipe_fat_list.append(hit["recipe"]["totalNutrients"][key]["quantity"])
+            elif key == "SUGAR":
+                recipe_sugar_list.append(hit["recipe"]["totalNutrients"][key]["quantity"])
+
+    formatted_recipe_fat_list = list(np.around(np.array(recipe_fat_list), 2))
+    formatted_recipe_sugar_list = list(np.around(np.array(recipe_sugar_list), 2))
+
+    return [recipe_names_list, formatted_recipe_fat_list, formatted_recipe_sugar_list]
 
 
 def retrieve_data_Spoonacular(input_value):
@@ -45,11 +59,7 @@ def retrieve_data_Spoonacular(input_value):
 
     response = requests.request("GET", url, headers=headers, params=querystring)
 
-    recipes_data = response.json()
-
-
     print(response.text)
-
 
 
 if __name__ == "__main__":
