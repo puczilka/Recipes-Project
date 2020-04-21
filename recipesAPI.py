@@ -30,20 +30,28 @@ def retrieve_data_Edamam(input_value):
 
     recipe_fat_list = []
     recipe_sugar_list = []
+    recipe_protein_list = []
+    recipe_fiber_list = []
 
     for hit in hits:
-        keys = ["FAT", "SUGAR"]
+        keys = ["FAT", "SUGAR","PROCNT", "FIBTG"]
 
         for key in keys:
             if key == "FAT":
                 recipe_fat_list.append(hit["recipe"]["totalNutrients"][key]["quantity"])
             elif key == "SUGAR":
                 recipe_sugar_list.append(hit["recipe"]["totalNutrients"][key]["quantity"])
+            elif key == "PROCNT":
+                recipe_protein_list.append(hit["recipe"]["totalNutrients"][key]["quantity"])
+            elif key == "FIBTG":
+                recipe_fiber_list.append(hit["recipe"]["totalNutrients"][key]["quantity"])
 
     formatted_recipe_fat_list = list(np.around(np.array(recipe_fat_list), 2))
     formatted_recipe_sugar_list = list(np.around(np.array(recipe_sugar_list), 2))
+    formatted_recipe_protein_list = list(np.around(np.array(recipe_protein_list), 2))
+    formatted_recipe_fiber_list = list(np.around(np.array(recipe_fiber_list), 2))
 
-    return [recipe_names_list, formatted_recipe_fat_list, formatted_recipe_sugar_list]
+    return [recipe_names_list, formatted_recipe_fat_list, formatted_recipe_sugar_list, formatted_recipe_protein_list, formatted_recipe_fiber_list]
 
 
 def retrieve_data_Spoonacular(input_value):
