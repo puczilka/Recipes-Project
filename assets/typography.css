@@ -1,0 +1,23 @@
+body {
+    font-family: sans-serif;
+    align-content: center;
+    margin: 13px;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: forestgreen;
+}
+
+#recipe {
+    align-content: center;
+    border-bottom: thin black solid;
+    background-color: honeydew;
+}
+
+#submit-val {
+    margin-bottom: 20px;
+}
+
+#nutrition {
+    font-weight: bold;
+    color: black;
+}
