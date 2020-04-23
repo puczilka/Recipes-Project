@@ -3,6 +3,17 @@ import json
 import numpy as np
 from collections import Counter
 #=========================================put in function when you know how the input is formatted from DASH=======================
+# the api returns recipes in random order and the included/ excluded ingredients returned by api are wrong.
+# this code orders them in total used ingredients
+# The code prints number of ingredients used from your input, and a ratio of the used: total needed
+# The filters so far have cuisine. You have to have at least 1 cuisine for the api to work.
+# the user input should be unticking a certian recipe(inputted by cuisine_exl
+
+# dietary requirements
+#not to marta and joanna: input has to be exact could use boolean input to the code? not yet included as i don't know the input type yet
+#dietary_require=["Gluten Free", "Ketogenic", "Vegetarian", "Lacto-Vegetarian"]
+
+
 # cuisines to exclude
 cuisine_excl=[ "american", "african" ,"british" , "cajun" , "caribbean" , "chinese" , "eastern european" , "european" , "french",
                "german" , "greek" , "indian" , "irish" , "japanese" , "jewish" , "korean" , "latin american" , "mediterranean" ,
@@ -30,7 +41,7 @@ print(cuisine_total)
 
 #===================================start ingredients input===========================================================
 
-ingredients="pasta, tomatoes, onion, cheese, mushroom, pepper, chicken "
+ingredients="pasta, tomatoes, onion, cheese, mushroom, pepper, chicken, butter, eggs "
 
 ingredients_in= ingredients.replace(",", "%2C")
 
@@ -69,6 +80,7 @@ def get_recipes(cuisine_in, ingredients):
     #print(options_json['results'])
     ingredients_tot = []
     title_array=[]
+    id_array=[]
     print("lenght",len(options_json['results']))
     for i in range(len(options_json['results'])):
         id = options_json['results'][i]['id']
@@ -77,7 +89,9 @@ def get_recipes(cuisine_in, ingredients):
         used_ingr= options_json['results'][i]['usedIngredientCount']
         cuisines = options_json['results'][i]['cuisines']
         title_array.append(title)
+        id_array.append(id)
         print(title,missed_ingr, used_ingr, cuisines)
+        #get more info about the recipe: eg exact ingredient list and cooking time, serving time
 
         url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + str(id) + "/information"
         #print(url)
@@ -91,21 +105,12 @@ def get_recipes(cuisine_in, ingredients):
         print(index.index(1), type(index.index(1)))
 
         ingredients_results=list(map(lambda b: b['name'], response_recipe_json['extendedIngredients']))
-        #ingredients_results = map(lambda d: d['extendedIngredients'], response_recipe_json)
-        #names = map(lambda d: d['name'], variation_json)
 
         #print(ingredients_results)
 
-
-        # ingredients_results = []
-        #
-        # for i in range(len(response_recipe_json['extendedIngredients'])):
-        #
-        #     ingredients_results.append(str( response_recipe_json['extendedIngredients'][i]['name']))
-        #
         ingredients_tot.append(ingredients_results)
-    print(ingredients_tot)
-    return ingredients_tot, title_array
+    print(ingredients_tot, id_array)
+    return ingredients_tot, title_array, id_array
 
 
 
@@ -113,7 +118,7 @@ def get_recipes(cuisine_in, ingredients):
 
 
 
-def max_ingredients(ingredients_results, ingredients, title_array):
+def max_ingredients(ingredients_results, ingredients, title_array, id_array):
     # using Union operation using set theory you need
     ingredients_user= ingredients.split(",") #change to array
     matches_array=[]
@@ -122,30 +127,32 @@ def max_ingredients(ingredients_results, ingredients, title_array):
     intersection_recipe=[]
     intersec_index=[]
     for i in range(len(ingredients_user)):
+        # for each ingredient input from the user, find variations
+
 
         completed_ingr= complete_search(ingredients_user[i])
-        #intersection_recipe[i]=[]
 
-        #intersection_recipe = list(map(lambda d: d.intersection(completed_ingr), set(ingredients_results)))
         for j in range(len(ingredients_results)):
             print(ingredients_results[j],ingredients_user[i])
-
+            # find whether the ingredients alternative is in this,
+            # use intersection and if there is a an intersection add the index to the list
             intersection_recipe=list(set(ingredients_results[j]).intersection(set(completed_ingr)))
             if len(intersection_recipe) != 0:
                 intersec_index.append(j)
 
         print(intersec_index)
+    # count the numbers that are repeated, and the more repeated the more the ingredients are used
 
-    #print(list((Counter(intersec_index) - Counter(set(intersec_index))).keys()))
     intersec_dict= dict(Counter(intersec_index))
+
     print(dict(Counter(intersec_index)))
     #names=list(map(lambda d: d['name'], variation_json))
     #list(map(lambda d: d.value, intersec_index))
-    intersec_sort = sorted(intersec_dict.items(), key=lambda x: x[1],reverse=True)
+    intersec_sort = sorted(intersec_dict.items(), key=lambda x: x[1],reverse=True)  # list of sets first value in this set is the index of recipe the original order that api returned
     print(intersec_sort, len(intersec_sort) , type(intersec_sort[0]))
-    recipes_array=list(map(lambda d:list(d)[0], intersec_sort ))
-    recipes_results=list(map(lambda d:title_array[d], recipes_array))
-    print(recipes_results)
+    print(id_array[0])
+    produce_output(intersec_sort, ingredients_results,id_array, title_array)
+
 
     # for i in range(len(ingredients_results)):                       #matrix of ingredients
     #     match=0
@@ -158,7 +165,7 @@ def max_ingredients(ingredients_results, ingredients, title_array):
 
 
 
-def complete_search(to_complete):
+def complete_search(to_complete):# produces variants on one ingredients so that they can be matched to the list of ingredients recipes
     url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/autocomplete"
 
     querystring = {"number": "100", "intolerances": "egg", "query": to_complete}
@@ -172,10 +179,60 @@ def complete_search(to_complete):
     variation_json= response.json()
     #print(type(variation_json))
     names=list(map(lambda d: d['name'], variation_json))
-    #print(response.text)
-    print(names, "--------------------------------------")
     return names
 
-ingredients_results, title_array=get_recipes(cuisine_total, ingredients)
-max_ingredients(ingredients_results, ingredients , title_array)
+
+
+def produce_output(intersec_sort, ingredients_results, id_array, title_array) :# return nutrition, included ingredients
+    #request API for the nutritional values:
+
+
+    #extract from the list of sets, only the amount of ingredients are repeated
+    recipes_array=list(map(lambda d:list(d)[0], intersec_sort )) # the index of the recipe in order that it is sorted
+    recipes_results=list(map(lambda d:title_array[d], recipes_array)) # order the recipes names according to the ingredients used
+    exclIngredient=list((map(lambda d:len(ingredients_results[d]), recipes_array))) # calculate the number of unused ingredinets in the order of the used ingredients
+    id_ordered = list(map(lambda d:id_array[d], recipes_array)) # order the ID number
+    #produce_output(id_ordered, )
+    # put in a dictionary so it's easier to read
+    print(exclIngredient)
+    recipes_incIngredient = [dict(zip(recipes_results, list(map(lambda d:list(d)[1], intersec_sort )) )) ]# returns a dictionary of {recipe name: ingredients used}
+    recipes_exclIngredient=[dict(zip(recipes_results, list(map(lambda a,d: a-list(d)[1], exclIngredient,intersec_sort)) )) ]
+    recipes_ingredientRatio=[dict(zip(recipes_results, list(map(lambda d,a: (list(d)[1])/a, intersec_sort,exclIngredient)) )) ] #ratio of used ingredients to total ingredients in recipe
+
+
+    print(recipes_incIngredient)
+    print(recipes_exclIngredient)
+    print(recipes_ingredientRatio)
+    recipes_nutrition = list(map(lambda f: nutrition(f), id_ordered))
+    #print(id_array, "==========================")
+    nutrition(id_array[0])
+    print(recipes_nutrition)
+
+
+def nutrition(id):
+
+    url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/"+ str(id) +"/nutritionWidget"
+
+    headers = {
+        'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+        'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
+        'accept': "text/html"
+    }
+
+    response_nutrition = requests.request("GET", url, headers=headers)
+    nutrition_text=response_nutrition.text # i don't know why making it json causes an error! but making it a text works
+    print(response_nutrition.text)
+    #nutrition_json=response_nutrition.json()
+
+    #print(nutrition_json)
+
+    return 1
+
+
+
+
+ingredients_results, title_array, id_array=get_recipes(cuisine_total, ingredients)
+max_ingredients(ingredients_results, ingredients , title_array,id_array)
+print(id_array)
 #complete_search("cheese")
+
