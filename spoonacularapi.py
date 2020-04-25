@@ -292,4 +292,3 @@ def get_name_url_nutrients(recipes_data, value):
     return [titles, url_links, recipe_fat_list, recipe_carbs_list, recipe_protein_list, recipe_calories_list]
 
 
-retrieve_data("CHICKEN ")

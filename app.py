@@ -19,7 +19,7 @@ app.layout = html.Div([
              children=''),
 ])
 
-
+print("Hellooooo")
 @app.callback(
     dash.dependencies.Output('container-button-basic', 'children'),
     [dash.dependencies.Input('submit-val', 'n_clicks')],
@@ -28,11 +28,10 @@ app.layout = html.Div([
 def on_click(n_clicks, value):
 
     recipe_names = spoonacularapi.retrieve_data(value)
-    # Create links to external recipes' websites
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for suggested top recipes.", color="success"),
+        dbc.Alert("See below for the best matches.", color="success"),
     ])
 
     nav = html.Div(
@@ -63,33 +62,40 @@ def on_click(n_clicks, value):
                     {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[2][3], recipe_names[3][3], recipe_names[4][3]], 'type': 'bar', 'name': recipe_names[0][3]},
                     {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[2][4], recipe_names[3][4], recipe_names[4][4]], 'type': 'bar', 'name': recipe_names[0][4]},
                 ],
-                'layout': {
-                    'title': 'Comparision of nutritional values between the recipes',
-                    'yaxis': {
-                        'title': 'Amount (g)'
-                    }
-                }
+                'layout': go.Layout(
+                    height=350,
+                    width=1100,
+                    yaxis_title="Amount (g)",
+                    title="Comparison of nutritional values between the recipes",
+                    margin=dict(
+                        b=50,
+                        r=50,
+                    ),
+                )
             }
         )
     ])
 
+    # Display a horizontal bar chart showing calories
     app.horizontal_bar_chart = html.Div([
-        dcc.Graph(style={'height': '400px', "width": "500px"},
-                id='horizontal_bar_chart',
+        dcc.Graph(
+                  id='horizontal_bar_chart',
                   figure={
                       'data': [go.Bar(x=[recipe_names[5][0], recipe_names[5][1], recipe_names[5][2], recipe_names[5][3], recipe_names[5][4]],
                                       y=[recipe_names[0][0], recipe_names[0][1], recipe_names[0][2], recipe_names[0][3], recipe_names[0][4]],
                                       orientation='h')],
-                      "layout":{
-                          'title': 'Calories comparision between recipes',
-                          'xaxis': {
-                              'title': 'Calories (kcal)'
-                            },
-                          'yaxis': {
-                              'automargin': 'true'
-                          },
-                      }
-                  })
+                      'layout': go.Layout(
+                          height=350,
+                          width=1100,
+                          xaxis_title="Calories (kcal)",
+                          title="Calories comparison between recipes",
+                          margin=dict(
+                              l=300,
+                              t=50,
+                          ),
+                      ),
+                  }
+                )
     ])
 
     return suggestions, nav, app.bar_chart, app.horizontal_bar_chart
