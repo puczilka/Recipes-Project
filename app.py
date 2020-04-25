@@ -30,39 +30,37 @@ def on_click(n_clicks, value):
     recipe_names = spoonacularapi.retrieve_data(value)
     # Create links to external recipes' websites
 
-    suggestions = html.Div([
+    row = html.Div(
+        [
+            dbc.Row(dbc.Col(
+            html.Div([
         html.Br(),
         dbc.Alert("See below for suggested top recipes.", color="success"),
-    ])
+    ]))),
 
-    nav = html.Div(
+    dbc.Row(dbc.Col(html.Div(
         [
             dbc.Nav(
                 [
-                    dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-                    dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-                    dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-                    dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-                    dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
+                    html.Div(children = [dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
+                    html.Img(src=recipe_names[2][0])]),
+                    html.Div(children = [dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
+                    html.Img(src=recipe_names[2][1])]),
+                    html.Div(children = [dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
+                    html.Img(src=recipe_names[2][2])]),
+                    html.Div(children = [dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
+                    html.Img(src=recipe_names[2][3])]),
+                    html.Div(children = [dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe"),
+                    html.Img(src=recipe_names[2][4])])
                 ]
             ),
             html.Br(),
         ]
-    )
-
-
-# Display images of the meals
-
-    app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
-                                     html.Img(src=recipe_names[2][1]),
-                                     html.Img(src=recipe_names[2][2]),
-                                     html.Img(src=recipe_names[2][3]),
-                                     html.Img(src=recipe_names[2][4])])
-
+    ))),
 
 
     # Display a bar chart showing nutritional value of the recipes
-    app.bar_chart = html.Div(children=[
+    dbc.Row(dbc.Col(html.Div(children=[
 
         dcc.Graph(style={'height': '400px', "width": "1100px"},
             id='bar_chart',
@@ -82,9 +80,9 @@ def on_click(n_clicks, value):
                 }
             }
         )
-    ])
+    ]))),
 
-    app.horizontal_bar_chart = html.Div([
+     dbc.Row(dbc.Col(html.Div([
         dcc.Graph(style={'height': '400px', "width": "500px"},
                 id='horizontal_bar_chart',
                   figure={
@@ -100,10 +98,12 @@ def on_click(n_clicks, value):
                               'automargin': 'true'
                           },
                       }
-                  })
-    ])
+                  })])))
+            ])
 
-    return suggestions, nav, app.images, app.bar_chart, app.horizontal_bar_chart
+
+
+    return row
 
 
 if __name__ == '__main__':
