@@ -223,7 +223,7 @@ def produce_output(intersec_sort, ingredients_results, id_array, title_array): #
 
 
 def retrieve_data(value):
-    URL1 = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
+    url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
 
     querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
 
@@ -232,7 +232,7 @@ def retrieve_data(value):
         'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
     }
 
-    response1 = requests.request("GET", URL1, headers=headers, params=querystring)
+    response1 = requests.request("GET", url, headers=headers, params=querystring)
     recipes_data = response1.json()
 
     # Call the function which will return names, URLs and nutritional information for Dash
@@ -254,8 +254,7 @@ def get_name_url_nutrients(recipes_data, value):
     recipe_fat_list = []
     recipe_protein_list = []
     recipe_carbs_list = []
-
-    keys = ["fat", "carbs", "protein"]
+    recipe_calories_list = []
 
     # Get names and IDs
     for hit in recipes_data:
@@ -274,19 +273,23 @@ def get_name_url_nutrients(recipes_data, value):
         response3 = requests.request("GET", url_2, headers=headers, params=querystring)
         response3_json = response3.json()
 
-        # Get specific nutritional information about fats, carbs and protein
-        for key in keys:
-            if key == "fat":
-                response_fat_no_units = response3_json[key][:-1]
-                recipe_fat_list.append(response_fat_no_units)
-            elif key == "carbs":
-                response_carbs_no_units = response3_json[key][:-1]
-                recipe_carbs_list.append(response_carbs_no_units)
-            elif key == "protein":
-                response_protein_no_units = response3_json[key][:-1]
-                recipe_protein_list.append(response_protein_no_units)
+        # Get specific nutritional information about fats, carbs and proteins
+        response_fat_no_units = response3_json["fat"][:-1]
+        recipe_fat_list.append(response_fat_no_units)
+
+        response_carbs_no_units = response3_json["carbs"][:-1]
+        recipe_carbs_list.append(response_carbs_no_units)
+
+        response_protein_no_units = response3_json["protein"][:-1]
+        recipe_protein_list.append(response_protein_no_units)
+
+        response_calories_no_units = response3_json["calories"]
+        recipe_calories_list.append(response_calories_no_units)
+
+    recipe_calories_list.sort()
 
     # Return names, urls and information about nutrients (fat, carbs and protein)
-    return [titles, url_links, recipe_fat_list, recipe_carbs_list, recipe_protein_list]
+    return [titles, url_links, recipe_fat_list, recipe_carbs_list, recipe_protein_list, recipe_calories_list]
 
 
+retrieve_data("CHICKEN ")

@@ -17,7 +17,14 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 20px;
 }
 
-#nutrition {
+#bar_chart {
+    font-weight: bold;
+    color: black;
+}
+
+#horizontal_bar_chart {
+    margin: 100px;
+    automargin-left: true;
     font-weight: bold;
     color: black;
 }
