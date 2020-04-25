@@ -251,6 +251,7 @@ def get_name_url_nutrients(recipes_data, value):
     titles = []
     ids = []
     url_links = []
+    images = []
     recipe_fat_list = []
     recipe_protein_list = []
     recipe_carbs_list = []
@@ -260,6 +261,7 @@ def get_name_url_nutrients(recipes_data, value):
     for hit in recipes_data:
         titles.append(hit["title"])
         ids.append(hit["id"])
+        images.append(hit["image"])
 
     for id in ids:
         # Get more information about each recipe by calling the API with IDs
@@ -289,6 +291,6 @@ def get_name_url_nutrients(recipes_data, value):
     recipe_calories_list.sort()
 
     # Return names, urls and information about nutrients (fat, carbs and protein)
-    return [titles, url_links, recipe_fat_list, recipe_carbs_list, recipe_protein_list, recipe_calories_list]
+    return [titles, url_links, images, recipe_fat_list, recipe_carbs_list, recipe_protein_list, recipe_calories_list]
 
 
