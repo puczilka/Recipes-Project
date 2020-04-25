@@ -235,7 +235,7 @@ def retrieve_data(value):
     response1 = requests.request("GET", url, headers=headers, params=querystring)
     recipes_data = response1.json()
 
-    # Call the function which will return names, URLs and nutritional information for Dash
+    # Call the function which will return names, URLs, images and nutritional information for Dash
     return get_name_url_nutrients(recipes_data, value)
 
 
@@ -257,7 +257,7 @@ def get_name_url_nutrients(recipes_data, value):
     recipe_carbs_list = []
     recipe_calories_list = []
 
-    # Get names and IDs
+    # Get names, images and IDs
     for hit in recipes_data:
         titles.append(hit["title"])
         ids.append(hit["id"])
@@ -290,8 +290,7 @@ def get_name_url_nutrients(recipes_data, value):
 
     recipe_calories_list.sort()
 
-    # Return names, urls and information about nutrients (fat, carbs and protein)
+    # Return names, urls, images and information about nutrients (fat, carbs and protein)
     return [titles, url_links, images, recipe_fat_list, recipe_carbs_list, recipe_protein_list, recipe_calories_list]
 
 
-retrieve_data("CHICKEN ")
