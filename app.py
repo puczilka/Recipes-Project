@@ -50,6 +50,17 @@ def on_click(n_clicks, value):
         ]
     )
 
+
+# Display images of the meals
+
+    app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
+                                     html.Img(src=recipe_names[2][1]),
+                                     html.Img(src=recipe_names[2][2]),
+                                     html.Img(src=recipe_names[2][3]),
+                                     html.Img(src=recipe_names[2][4])])
+
+
+
     # Display a bar chart showing nutritional value of the recipes
     app.bar_chart = html.Div(children=[
 
@@ -92,7 +103,7 @@ def on_click(n_clicks, value):
                   })
     ])
 
-    return suggestions, nav, app.bar_chart, app.horizontal_bar_chart
+    return suggestions, nav, app.images, app.bar_chart, app.horizontal_bar_chart
 
 
 if __name__ == '__main__':
