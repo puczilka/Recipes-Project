@@ -13,12 +13,38 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.layout = html.Div([
     dbc.Alert("Type in the ingredients and we will suggest recipes!", color="success"),
-    html.Div(dcc.Input(id='input-on-submit', placeholder="Type in ingredients...",  type='text')),
+
+    html.Div(dcc.Input(id='input-on-submit', placeholder="Type in ingredients ie. tomato, rice",  type='text')),
     dbc.Button('Submit', color="success", id='submit-val', n_clicks=0),
     html.Div(id='container-button-basic',
              children=''),
-])
+    dbc.DropdownMenu(
+            [
+                dbc.DropdownMenuItem("A button", id="dropdown-button"),
+                dbc.DropdownMenuItem(
+                    "Vegan", href="/l/components/dropdown_menu"
+                ),
+                dbc.DropdownMenuItem(
+                    "Vegetarian", href="https://github.com"
+                ),
+                dbc.DropdownMenuItem(
+                    "Pescetarian",
+                    href="/l/components/dropdown_menu",
+                    external_link=True,
+                ),],
+            label="Dietary restrictions"),
+        html.P(id="item-clicks", className="mt-3")])
 
+
+
+@app.callback(
+    dash.dependencies.Output("item-clicks", "children"), [dash.dependencies.Input("dropdown-button", "n_clicks")]
+)
+
+def count_clicks(n):
+    if n:
+        return f"Button clicked {n} times."
+    return "Button not clicked yet."
 
 @app.callback(
     dash.dependencies.Output('container-button-basic', 'children'),
