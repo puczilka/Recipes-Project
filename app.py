@@ -49,29 +49,24 @@ def on_click(n_clicks, value):
         ]
     )
 
-
 # Display images of the meals
-
     app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
                                      html.Img(src=recipe_names[2][1]),
                                      html.Img(src=recipe_names[2][2]),
                                      html.Img(src=recipe_names[2][3]),
                                      html.Img(src=recipe_names[2][4])])
 
-
-
     # Display a bar chart showing nutritional value of the recipes
     app.bar_chart = html.Div(children=[
-
         dcc.Graph(style={'height': '400px', "width": "1100px"},
             id='bar_chart',
             figure={
                 'data': [
-                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[2][0], recipe_names[3][0], recipe_names[4][0]], 'type': 'bar', 'name': recipe_names[0][0]},
-                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[2][1], recipe_names[3][1], recipe_names[4][1]], 'type': 'bar', 'name': recipe_names[0][1]},
-                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[2][2], recipe_names[3][2], recipe_names[4][2]], 'type': 'bar', 'name': recipe_names[0][2]},
-                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[2][3], recipe_names[3][3], recipe_names[4][3]], 'type': 'bar', 'name': recipe_names[0][3]},
-                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[2][4], recipe_names[3][4], recipe_names[4][4]], 'type': 'bar', 'name': recipe_names[0][4]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][0], recipe_names[4][0], recipe_names[5][0]], 'type': 'bar', 'name': recipe_names[0][0]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][1], recipe_names[4][1], recipe_names[5][1]], 'type': 'bar', 'name': recipe_names[0][1]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][2], recipe_names[4][2], recipe_names[5][2]], 'type': 'bar', 'name': recipe_names[0][2]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][3], recipe_names[4][3], recipe_names[5][3]], 'type': 'bar', 'name': recipe_names[0][3]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][4], recipe_names[4][4], recipe_names[5][4]], 'type': 'bar', 'name': recipe_names[0][4]},
                 ],
                 'layout': go.Layout(
                     height=350,
@@ -92,7 +87,7 @@ def on_click(n_clicks, value):
         dcc.Graph(
                   id='horizontal_bar_chart',
                   figure={
-                      'data': [go.Bar(x=[recipe_names[5][0], recipe_names[5][1], recipe_names[5][2], recipe_names[5][3], recipe_names[5][4]],
+                      'data': [go.Bar(x=[recipe_names[6][0], recipe_names[6][1], recipe_names[6][2], recipe_names[6][3], recipe_names[6][4]],
                                       y=[recipe_names[0][0], recipe_names[0][1], recipe_names[0][2], recipe_names[0][3], recipe_names[0][4]],
                                       orientation='h')],
                       'layout': go.Layout(
@@ -101,7 +96,7 @@ def on_click(n_clicks, value):
                           xaxis_title="Calories (kcal)",
                           title="Calories comparison between recipes",
                           margin=dict(
-                              l=300,
+                              l=350,
                               t=50,
                           ),
                       ),
