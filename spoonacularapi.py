@@ -3,7 +3,7 @@ import json
 from collections import Counter
 
 
-def filters():
+def filters(cuisine, diet_value):
     # ========================================= put in function when you know how the input is formatted from DASH =======================
     # the api returns recipes in random order and the included/excluded ingredients returned by api are wrong.
     # this code orders them in total used ingredients
@@ -17,41 +17,56 @@ def filters():
 
 
     # cuisines to exclude
-    cuisine_excl = ["american", "african", "british", "cajun", "caribbean", "chinese", "eastern european", "european", "french",
-                    "german", "greek", "indian", "irish", "japanese", "jewish", "korean", "latin american", "mediterranean",
-                    "mexican", "middle eastern", "nordic", "southern", "spanish", "thai", "vietnamese"]
+    # cuisines to exclude
+    # cuisine_excl = ["american", "african", "british", "cajun", "caribbean", "chinese", "eastern european", "european", "french",
+    #                 "german", "greek", "indian", "irish", "japanese", "jewish", "korean", "latin american", "mediterranean",
+    #                 "mexican", "middle eastern", "nordic", "southern", "spanish", "thai", "vietnamese"]
 
+    cuisine_list = ["african", "american", "british", "cajun", "caribbean", "chinese", "eastern european", "european",
+                    "french", \
+                    "german", "greek", "indian", "irish", "italian", "japanese", "jewish", "korean",
+                    "mediterranean", \
+                    "mexican", "middle eastern", "nordic", "southern", "spanish", "thai", "vietnamese"]
 
     # all cuisines available
     cuisine_total = "african, american, british, cajun, caribbean, chinese, eastern european, european, french, " \
-                    "german, greek, indian, irish, italian, japanese, jewish, korean, latin american, mediterranean, " \
+                    "german, greek, indian, irish, italian, japanese, jewish, korean, mediterranean, " \
                     "mexican, middle eastern, nordic, southern, spanish, thai, vietnamese"
 
+    cuisine_excl = list(map(lambda b: cuisine_list[b-1], cuisine))
+    print(cuisine_excl)
 
     # eliminate the cuisines (chosen by user) in cuisine total
     # cuisine total is an input to the function get_recipes
     for i in range(len(cuisine_excl)):
         if cuisine_excl[i] == "vietnamese":
-            cuisine_total = cuisine_total.replace(cuisine_excl[i], " ")
+            cuisine_total = cuisine_total.replace(cuisine_excl[i], "")
+            print(cuisine_excl[i])
         else:
-            cuisine_total = cuisine_total.replace((cuisine_excl[i] + " ,"), " ")
+            cuisine_total = cuisine_total.replace((cuisine_excl[i] + ","), "")
+            print(cuisine_excl[i], cuisine_total)
 
         # print(cuisine_excl[i])
 
     print(cuisine_total)
+
+    diet=["vegan", "vegetarian", "pescetarian", "gluten free", "ketogenic"]
+    diet_out=''.join(list(map(lambda b: diet[b-1], diet_value)))
+    print(diet_out)
+    return cuisine_total, diet_out
 
 # ===================================end function for formatting/inputting the cuisine================================
 
 
 # ===================================start ingredients input===========================================================
 
-ingredients = "pasta, tomatoes, onion, cheese, mushroom, pepper, chicken, butter, eggs "
-ingredients_in = ingredients.replace(",", "%2C")
+#ingredients = "pasta, tomatoes, onion, cheese, mushroom, pepper, chicken, butter, eggs "
+#ingredients_in = ingredients.replace(",", "%2C")
 
 # ===================================end function for formatting/inputting the cuisine================================
 
 
-def get_recipes(cuisine_in, ingredients):
+def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
     url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex"
 
     # querystring = {"includeIngredients":"onions%2Clettuce%2Ctomato","instructionsRequired":"true", "addRecipeInformation":"false","ranking":"1",
@@ -66,7 +81,8 @@ def get_recipes(cuisine_in, ingredients):
     querystring = {"cuisine": cuisine_in,
                    "includeIngredients": ingredients, "addRecipeInformation": "true",
                    "sort": "popularity",
-                   "ignorePantry": "false", "limitLicense": "false", "offset": "0", "number": "100"}
+                   "diet": diet_in,
+                   "ignorePantry": "false", "limitLicense": "false", "offset": "0", "number": recipe_return_value}
 
     # querystring = {"query":"burger","cuisine":"american","number":"10"}
 
@@ -84,6 +100,8 @@ def get_recipes(cuisine_in, ingredients):
     ingredients_tot = []
     title_array = []
     id_array = []
+    source_url=[]
+    image=[]
 
     print("length", len(options_json['results']))
 
@@ -95,6 +113,9 @@ def get_recipes(cuisine_in, ingredients):
         cuisines = options_json['results'][i]['cuisines']
         title_array.append(title)
         id_array.append(id)
+        source_url.append(options_json['results'][i]['sourceUrl'])
+        image.append(options_json['results'][i]['image'])
+
         print(title, missed_ingr, used_ingr, cuisines)
         # get more info about the recipe: eg exact ingredient list and cooking time, serving time
 
@@ -109,7 +130,7 @@ def get_recipes(cuisine_in, ingredients):
         index = (tuple(b+1 for b in group) for group in response_recipe_json['extendedIngredients'])
         index = tuple(element for element in range(len(response_recipe_json['extendedIngredients'])))
 
-        print(index.index(1), type(index.index(1)))
+        #print(index.index(1), type(index.index(1)))
 
         ingredients_results = list(map(lambda b: b['name'], response_recipe_json['extendedIngredients']))
 
@@ -118,7 +139,7 @@ def get_recipes(cuisine_in, ingredients):
         ingredients_tot.append(ingredients_results)
 
     print(ingredients_tot, id_array)
-    return ingredients_tot, title_array, id_array
+    return ingredients_tot, title_array, id_array, source_url, image
 
 
 def max_ingredients(ingredients_results, ingredients, title_array, id_array):
@@ -238,9 +259,9 @@ def retrieve_data(value):
     # Call the function which will return names, URLs, images and nutritional information for Dash
     return get_name_url_nutrients(recipes_data, value)
 
-
-def get_name_url_nutrients(recipes_data, value):
-
+#id_array, recipe_names, source_url, image,  value
+def get_name_url_nutrients(ids,titles,url_links,images, value):
+    print(ids, ' ids here in nutrients')
     querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
 
     headers = {
@@ -248,27 +269,29 @@ def get_name_url_nutrients(recipes_data, value):
         'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
     }
 
-    titles = []
-    ids = []
-    url_links = []
-    images = []
+    #titles = []
+    #ids = []
+    #url_links = []
+    #images = []
     recipe_fat_list = []
     recipe_protein_list = []
     recipe_carbs_list = []
     recipe_calories_list = []
 
     # Get names, images and IDs
-    for hit in recipes_data:
-        titles.append(hit["title"])
-        ids.append(hit["id"])
-        images.append(hit["image"])
+    # for hit in recipes_data:
+    #     titles.append(hit["title"])
+    #     ids.append(hit["id"])
+    #     images.append(hit["image"])
+
+
 
     for id in ids:
         # Get more information about each recipe by calling the API with IDs
-        url_1 = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + str(id) + "/information"
-        response2 = requests.request("GET", url_1, headers=headers, params=querystring)
-        other_data = response2.json()
-        url_links.append(other_data["sourceUrl"])
+        # url_1 = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + str(id) + "/information"
+        # response2 = requests.request("GET", url_1, headers=headers, params=querystring)
+        # other_data = response2.json()
+        # url_links.append(other_data["sourceUrl"])
 
         # Get nutritional information
         url_2 = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + str(id) + "/nutritionWidget.json"

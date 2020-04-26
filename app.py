@@ -1,5 +1,6 @@
 import dash
 import dash_html_components as html
+from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import spoonacularapi
@@ -17,17 +18,104 @@ app.layout = html.Div([
     dbc.Button('Submit', color="success", id='submit-val', n_clicks=0),
     html.Div(id='container-button-basic',
              children=''),
+    dbc.FormGroup(
+        [
+            dbc.Label("Choose one off recipe, or Meal plan"),
+            dbc.Checklist(
+                options=[
+                    {"label": "Meal plan", "value": 1},
+                ],
+                value=[],
+                id="switches-input",
+                switch=True,
+            ),
+        ]
+    ),
+    dbc.FormGroup([
+        dbc.Label("Choose dietary preferences"),
+        dbc.Checklist(
+            options=[
+                {"label": "Vegan", "value": 1},
+                {"label": "Vegetarian", "value": 2},
+                {"label": "Pescetarian", "value": 3},
+                {"label": "Gluten Free", "value": 4},
+                {"label": "Ketogenic", "value": 5},
+            ],
+            value=[],
+            id="checklist-input-diet",
+        ),
+    ]),
+    dbc.FormGroup([
+        dbc.Label("Choose Cuisines to exclude"),
+        dbc.Checklist(
+            options=[
+                {"label": "African", "value": 1},
+                {"label": "American", "value": 2},
+                {"label": "British", "value": 3},
+                {"label": "Cajun", "value": 4},
+                {"label": "Caribbean", "value": 5},
+                {"label": "Chinese", "value": 6},
+                {"label": "Eastern European", "value": 7},
+                {"label": "French", "value": 8},
+                {"label": "German", "value": 9},
+                {"label": "Greek", "value": 10},
+                {"label": "Indian", "value": 11},
+                {"label": "Irish", "value": 12},
+                {"label": "Italian", "value": 13},
+                {"label": "Japanese", "value": 14},
+                {"label": "Jewish", "value": 15},
+                {"label": "Korean", "value": 16},
+                {"label": "Latin American", "value": 17},
+                {"label": "Mediterranean", "value": 18},
+                {"label": "Mexican", "value": 19},
+                {"label": "Middle Eastern", "value": 20},
+                {"label": "Nordic", "value": 21},
+                {"label": "Southern", "value": 22},
+                {"label": "Spanish", "value": 23},
+                {"label": "Thai", "value": 24},
+                {"label": "Vietnamese", "value": 25},
+            ],
+            value=[],
+            id="checklist-input-cuisine",
+            inline= True
+        ),
+    ])
+    #"african, american, british, cajun, caribbean, chinese, eastern european, european, french,
+    # " \"german, greek, indian, irish, italian, japanese, jewish, korean, latin american, mediterranean,
+    # " \"mexican, middle eastern, nordic, southern, spanish, thai, vietnamese"
+
 ])
+
+
+
+
+
 
 print("Hellooooo")
 @app.callback(
     dash.dependencies.Output('container-button-basic', 'children'),
-    [dash.dependencies.Input('submit-val', 'n_clicks')],
+    [dash.dependencies.Input('submit-val', 'n_clicks'),
+     dash.dependencies.Input("checklist-input-diet", "value"),
+     dash.dependencies.Input("checklist-input-cuisine", "value"),
+     dash.dependencies.Input("switches-input", "value")],
     [dash.dependencies.State('input-on-submit', 'value')]
-)
-def on_click(n_clicks, value):
 
-    recipe_names = spoonacularapi.retrieve_data(value)
+)
+
+
+
+def on_click(n_clicks, diet_value, cuisine_value, meal_plan,  value  ):
+    print("hello world", diet_value,cuisine_value, meal_plan)
+    cuisine_total, diet_out= spoonacularapi.filters(cuisine_value, diet_value)
+
+    if len(meal_plan)>= 1:  # then the switch box is switched
+        recipe_return_value=100 #meal plan requires maximum number of recipes to be filtered
+    else:
+        recipe_return_value=5   # normal operation requires top 5 recipes
+
+    ingredients_tot, recipe_names, id_array, source_url, image=spoonacularapi.get_recipes(cuisine_total, diet_out, value, recipe_return_value)
+    #recipe_names = spoonacularapi.retrieve_data(value)
+    recipe_names= spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image,  value)
 
     suggestions = html.Div([
         html.Br(),
