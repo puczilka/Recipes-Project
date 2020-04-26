@@ -13,13 +13,12 @@ app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.layout = html.Div([
     dbc.Alert("Type in the ingredients and we will suggest recipes!", color="success"),
-    html.Div(dcc.Input(id='input-on-submit', placeholder="Type in ingredients...",  type='text')),
+    html.Div(dcc.Input(id='input-on-submit', placeholder="Type in your ingredients separated by coma...",  type='text', style={'width': '30%'})),
     dbc.Button('Submit', color="success", id='submit-val', n_clicks=0),
     html.Div(id='container-button-basic',
              children=''),
 ])
 
-print("Hellooooo")
 @app.callback(
     dash.dependencies.Output('container-button-basic', 'children'),
     [dash.dependencies.Input('submit-val', 'n_clicks')],
