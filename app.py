@@ -5,19 +5,25 @@ import dash_bootstrap_components as dbc
 import spoonacularapi
 import plotly.graph_objs as go
 
+
+print(dcc.__version__) # 0.6.0 or above is required
+
 app = dash.Dash(__name__)
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+app.config.suppress_callback_exceptions = True
+
 app.layout = html.Div([
     dbc.Alert("Type in the ingredients and we will suggest recipes!", color="success"),
-    html.Div(dcc.Input(id='input-on-submit', placeholder="Type in your ingredients separated by coma...",  type='text', style={'width': '30%'})),
+    html.Div(dcc.Input(id='input-on-submit', placeholder="Type in your ingredients separated by coma...", type='text',
+                       style={'width': '30%'})),
     dbc.Button('Submit', color="success", id='submit-val', n_clicks=0),
-    html.Div(id='container-button-basic',
-             children=''),
+    html.Div(id='container-button-basic', children=''),
 ])
+
 
 @app.callback(
     dash.dependencies.Output('container-button-basic', 'children'),
