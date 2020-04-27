@@ -4,6 +4,8 @@ import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 import spoonacularapi
 import plotly.graph_objs as go
+import flask
+from dash.dependencies import Input, Output
 
 
 print(dcc.__version__) # 0.6.0 or above is required
@@ -11,12 +13,17 @@ print(dcc.__version__) # 0.6.0 or above is required
 app = dash.Dash(__name__)
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 app.config.suppress_callback_exceptions = True
 
-app.layout = html.Div([
+# This shows the location of the name page
+url_bar_and_content_div = html.Div([
+    dcc.Location(id='url', refresh=False),
+    html.Div(id='page-content')
+])
+
+app_layout = html.Div([
     dbc.Alert("Type in your ingredients and select preferences.", color="success"),
 
     dbc.FormGroup(
@@ -32,6 +39,7 @@ app.layout = html.Div([
             ),
         ]
     ),
+
     dbc.FormGroup([
         dbc.Label("Choose Dietary Preferences"),
         dbc.Checklist(
@@ -46,6 +54,7 @@ app.layout = html.Div([
             id="checklist-input-diet",
         ),
     ]),
+
     dbc.FormGroup([
         dbc.Label("Choose cuisines to exclude"),
         dbc.Checklist(
@@ -75,9 +84,9 @@ app.layout = html.Div([
                 {"label": "Spanish", "value": 23},
                 {"label": "Thai", "value": 24},
                 {"label": "Vietnamese", "value": 25},
-    #"african, american, british, cajun, caribbean, chinese, eastern european, european, french,
-    # " \"german, greek, indian, irish, italian, japanese, jewish, korean, latin american, mediterranean,
-    # " \"mexican, middle eastern, nordic, southern, spanish, thai, vietnamese"
+                # "african, american, british, cajun, caribbean, chinese, eastern european, european, french,
+                # " \"german, greek, indian, irish, italian, japanese, jewish, korean, latin american, mediterranean,
+                # " \"mexican, middle eastern, nordic, southern, spanish, thai, vietnamese"
             ],
             value=[],
             id="checklist-input-cuisine",
@@ -89,8 +98,41 @@ app.layout = html.Div([
                       style={'width': '30%'})),
         dbc.Button('Submit', color="success", id='submit-val', n_clicks=0),
         html.Div(id='container-button-basic', children=''),
+
+        # Hyperlink to /meal-planning which opens in a new tab
+        dcc.Link('Navigate to "/meal-planning"', href='/meal-planning', target="blank"),
     ])
 ])
+
+# Layout of the /meal-planning page
+layout_meal_planning = html.Div([
+    dbc.Alert("Check out your Meal Plan below!", color="success"),
+    html.Br(),
+    dcc.Link('Go back', href='/', target="blank"),
+])
+
+
+def serve_layout():
+    if flask.has_request_context():
+        return url_bar_and_content_div
+    return html.Div([
+        url_bar_and_content_div,
+        app_layout,
+        layout_meal_planning,
+    ])
+
+
+app.layout = serve_layout
+
+
+# Determines which page gets displayed by checking the "pathname"
+@app.callback(Output('page-content', 'children'),
+              [Input('url', 'pathname')])
+def display_page(pathname):
+    if pathname == "/meal-planning":
+        return layout_meal_planning
+    else:
+        return app_layout
 
 
 @app.callback(
@@ -101,7 +143,6 @@ app.layout = html.Div([
      dash.dependencies.Input("switches-input", "value")],
     [dash.dependencies.State('input-on-submit', 'value')]
 )
-
 def on_click(n_clicks, diet_value, cuisine_value, meal_plan, value):
     # print("hello world", diet_value,cuisine_value, meal_plan)
 
