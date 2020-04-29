@@ -15,8 +15,6 @@ app = dash.Dash(__name__, server=server)
 
 print(dcc.__version__) # 0.6.0 or above is required
 
-
-
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -273,4 +271,5 @@ def on_click(n_clicks, diet_value, cuisine_value, meal_plan, value):
 
 
 if __name__ == '__main__':
-    app.server.run(threaded=True, debug=False, dev_tools_ui=False, dev_tools_props_check=False)
+    app.run_server(debug=False, dev_tools_ui=False, dev_tools_props_check=False)
+    app.server.run(threaded=True, debug=False)
