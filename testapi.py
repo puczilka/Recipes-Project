@@ -21,10 +21,12 @@ def retrieve_data(value):
     recipe_fat_list = []
     recipe_protein_list = []
     recipe_carbs_list = []
+    images = []
 
     for hit in recipes_data:
         titles.append(hit["title"])
         ids.append(hit["id"])
+        images.append(hit["image"])
 
     links = []
     keys = ["fat", "carbs", "protein"]
@@ -53,9 +55,9 @@ def retrieve_data(value):
                 response_protein_no_units = response3_json[key][:-1]
                 recipe_protein_list.append(response_protein_no_units)
 
-    return [titles, links, recipe_fat_list, recipe_carbs_list, recipe_protein_list]
+    return [titles, links, recipe_fat_list, recipe_carbs_list, recipe_protein_list, images]
 
 
-
+print(retrieve_data("banana"))
 
 

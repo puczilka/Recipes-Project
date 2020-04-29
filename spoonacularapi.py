@@ -243,18 +243,46 @@ def produce_output(intersec_sort, ingredients_results, id_array, title_array): #
     print(recipes_nutrition)
 
 
-def retrieve_data(value):
-    url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
+def retrieve_data(value, diet, meal_type):
 
-    querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
+    if diet != NULL:
+        url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search"
 
-    headers = {
-        'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-        'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
-    }
+        querystring = {"diet": diet, "query": value}  #"excludeIngredients": "coconut", "intolerances": "egg%2C gluten",
 
-    response1 = requests.request("GET", url, headers=headers, params=querystring)
-    recipes_data = response1.json()
+        headers = {
+            'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+            'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01"
+        }
+
+        response1 = requests.request("GET", url, headers=headers, params=querystring)
+        recipes_data = response1.json()
+    elif meal_type != NULL:
+        url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search"
+
+        querystring = { "type": meal_type, "query": value}  #"excludeIngredients": "coconut", "intolerances": "egg%2C gluten",
+
+        headers = {
+            'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+            'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01"
+        }
+
+        response1 = requests.request("GET", url, headers=headers, params=querystring)
+        recipes_data = response1.json()
+
+    else:
+
+        url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
+
+        querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
+
+        headers = {
+            'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+            'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
+        }
+
+        response1 = requests.request("GET", url, headers=headers, params=querystring)
+        recipes_data = response1.json()
 
     # Call the function which will return names, URLs, images and nutritional information for Dash
     return get_name_url_nutrients(recipes_data, value)
