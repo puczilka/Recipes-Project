@@ -48,11 +48,11 @@ def filters(cuisine, diet_value):
 
         # print(cuisine_excl[i])
 
-    print(cuisine_total)
+    # print(cuisine_total)
 
-    diet=["vegan", "vegetarian", "pescetarian", "gluten free", "ketogenic"]
-    diet_out=''.join(list(map(lambda b: diet[b-1], diet_value)))
-    print(diet_out)
+    diet = ["vegan", "vegetarian", "pescetarian", "gluten free", "ketogenic"]
+    diet_out = ''.join(list(map(lambda b: diet[b-1], diet_value)))
+    # print(diet_out)
     return cuisine_total, diet_out
 
 # ===================================end function for formatting/inputting the cuisine================================
@@ -109,14 +109,14 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
         id = options_json['results'][i]['id']
         title = options_json['results'][i]['title']
         missed_ingr = options_json['results'][i]['missedIngredientCount']
-        used_ingr= options_json['results'][i]['usedIngredientCount']
+        used_ingr = options_json['results'][i]['usedIngredientCount']
         cuisines = options_json['results'][i]['cuisines']
         title_array.append(title)
         id_array.append(id)
         source_url.append(options_json['results'][i]['sourceUrl'])
         image.append(options_json['results'][i]['image'])
 
-        print(title, missed_ingr, used_ingr, cuisines)
+        # print(title, missed_ingr, used_ingr, cuisines)
         # get more info about the recipe: eg exact ingredient list and cooking time, serving time
 
         url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + str(id) + "/information"
@@ -138,7 +138,7 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
 
         ingredients_tot.append(ingredients_results)
 
-    print(ingredients_tot, id_array)
+    # print(ingredients_tot, id_array)
     return ingredients_tot, title_array, id_array, source_url, image
 
 
@@ -259,9 +259,11 @@ def retrieve_data(value):
     # Call the function which will return names, URLs, images and nutritional information for Dash
     return get_name_url_nutrients(recipes_data, value)
 
-#id_array, recipe_names, source_url, image,  value
+
+# id_array, recipe_names, source_url, image, value
 def get_name_url_nutrients(ids,titles,url_links,images, value):
-    print(ids, ' ids here in nutrients')
+    # print(ids, ' ids here in nutrients')
+
     querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
 
     headers = {
@@ -284,8 +286,6 @@ def get_name_url_nutrients(ids,titles,url_links,images, value):
     #     ids.append(hit["id"])
     #     images.append(hit["image"])
 
-
-
     for id in ids:
         # Get more information about each recipe by calling the API with IDs
         # url_1 = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + str(id) + "/information"
@@ -298,7 +298,7 @@ def get_name_url_nutrients(ids,titles,url_links,images, value):
         response3 = requests.request("GET", url_2, headers=headers, params=querystring)
         response3_json = response3.json()
 
-        # Get specific nutritional information about fats, carbs and proteins
+        # Get specific nutritional information about fats, carbs, proteins and calories
         response_fat_no_units = response3_json["fat"][:-1]
         recipe_fat_list.append(response_fat_no_units)
 
@@ -313,7 +313,7 @@ def get_name_url_nutrients(ids,titles,url_links,images, value):
 
     recipe_calories_list.sort()
 
-    # Return names, urls, images and information about nutrients (fat, carbs and protein)
+    # Return names, urls, images and information about nutrients (fat, carbs, proteins and calories)
     return [titles, url_links, images, recipe_fat_list, recipe_carbs_list, recipe_protein_list, recipe_calories_list]
 
 

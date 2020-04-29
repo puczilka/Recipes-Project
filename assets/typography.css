@@ -26,3 +26,20 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     color: black;
 }
+
+#jumbotron {
+    text-align: center;
+}
+
+#check-list {
+    font-weight: bold;
+}
+
+#navigate {
+    font-weight: bold;
+    font-size: 19px;
+}
+
+#jumbotronBox {
+    background-color: lavender;
+}
