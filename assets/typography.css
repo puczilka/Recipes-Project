@@ -31,15 +31,11 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
 
+#jumbotronBox {
+    background-color: linen;
+}
+
 #check-list {
     font-weight: bold;
 }
 
-#navigate {
-    font-weight: bold;
-    font-size: 19px;
-}
-
-#jumbotronBox {
-    background-color: linen;
-}

@@ -9,6 +9,7 @@ import plotly.graph_objs as go
 import flask
 from dash.dependencies import Input, Output
 
+
 server = flask.Flask(__name__)
 server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
 app = dash.Dash(__name__, server=server)
@@ -28,13 +29,10 @@ url_bar_and_content_div = html.Div([
 
 app_layout = html.Div([
     dbc.Jumbotron(
-
-
         [
             dbc.Container(
                 [
-
-                    html.H1("Welcome to PlanIt Food ", className="display-3",style={'color': 'white', 'fontSize': 50}),
+                    html.H1("Welcome to PlanIt Food ", className="display-3", style={'color': 'white', 'fontSize': 50}),
                     html.P(
                         "Reduce waste, save time and PlanIt",
                         className="lead", id="check-list", style={'color': 'white', 'fontSize': 25}
@@ -50,24 +48,9 @@ app_layout = html.Div([
                         "OR",
                         className="lead",style={'color': 'white', 'fontSize': 20},
                     ),
-                    html.P(
-                        "Go to link to generate a Meal Plan",
-                        className="lead", style={'color': 'white', 'fontSize': 20},
-                    ),
+
                     # Hyperlink to /meal-planning which opens in a new tab
-                    dcc.Link('Link to Meal Planning', href='/meal-planning', target="blank", id="navigate",style={'color': 'white', 'fontSize': 30})
-
-                    # html.Div(
-                    #     [
-                    #     html.Img(src='https://images.freeimages.com/images/large-previews/c3a/good-food-1497168.jpg')
-                    #     ],
-
-                    #)
-
-                    # html.Div(
-                    #     style="background-image: url(https://images.freeimages.com/images/large-previews/c3a/good-food-1497168.jpg); background-size: 100%;"
-                    # ),
-
+                    dcc.Link('Click here to go to Meal Planning', href='/meal-planning', target="blank", id="navigate", style={'color': 'white', 'fontSize': 20})
                 ],
                 id="jumbotron",
                 style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%','backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left', 'backgroundSize': 'cover'},#, 'position': 'fixed'},
@@ -75,7 +58,6 @@ app_layout = html.Div([
             )
         ],
         fluid=True,
-
         id="jumbotronBox",
     ),
 
@@ -136,66 +118,44 @@ app_layout = html.Div([
         html.Br(),
 
         html.Div(
-            dcc.Input(id='input-on-submit1', placeholder="Type in your ingredients separated by coma...", type='text',
+            dcc.Input(id='input-on-submit1', placeholder="Type in your ingredients separated by comma...", type='text',
                       style={'width': '30%'})),
         dbc.Button('Submit', color="success", id='submit-val', n_clicks=0),
         html.Div(id='container-button-basic', children=''),
     ])
 ])
-
-# Layout of the /meal-planning page
 layout_meal_planning = html.Div([
-dbc.Jumbotron(
-
-
+    dbc.Jumbotron(
         [
             dbc.Container(
                 [
-                    html.H1("Welcome to PlanIt Food", className="display-3",style={'color': 'white', 'fontSize': 50}),
+                    html.H1("Meal Planning Tool", className="display-3", style={'color': 'white', 'fontSize': 50}),
                     html.P(
-                        "Reduce waste, save time and PlanIt "
-                        "You have been taken to Meal plan! ",
+                        "Reduce waste, save time and PlanIt ",
                         className="lead", id="check-list", style={'color': 'white', 'fontSize': 30}
                     ),
                     html.Br(),
                     html.P(
-                        "To go back click on link below ",
+                        "Generate your meal plan by typing in at least 10 ingredients",
                         className="lead", style={'color': 'white', 'fontSize': 20},
                     ),
-                    dcc.Link('Go back', href='/', target="blank", style={'color': 'white', 'fontSize': 20}),
 
-                    html.P(
-                        "Generate your meal plan by typing in at least 10 of your ingredients",
-                        className="lead", style={'color': 'white', 'fontSize': 20},
-                    ),
-                    # Hyperlink to /meal-planning which opens in a new tab
-
-                    # html.Div(
-                    #     [
-                    #     html.Img(src='https://images.freeimages.com/images/large-previews/c3a/good-food-1497168.jpg')
-                    #     ],
-
-                    #)
-
-                    # html.Div(
-                    #     style="background-image: url(https://images.freeimages.com/images/large-previews/c3a/good-food-1497168.jpg); background-size: 100%;"
-                    # ),
-
+                    dcc.Link('Click here to go back', href='/', target="blank", style={'color': 'white', 'fontSize': 18}),
                 ],
                 id="jumbotron",
-                style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%','backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left', 'backgroundSize': 'cover'},#, 'position': 'fixed'},
+                style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%', 'backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left', 'backgroundSize': 'cover'},#, 'position': 'fixed'},
                 fluid=True,
             )
         ],
         fluid=True,
-
         id="jumbotronBox",
     ),
 
-    dbc.Alert("Check out your Meal Plan below!", color="success", id="check-list"),
+    dbc.Alert("Type in 10 ingredients below to generate a Meal Plan!", color="success", id="check-list"),
+
     html.Br(),
-    dcc.Link('Go back', href='/', target="blank"),
-dbc.FormGroup([
+
+    dbc.FormGroup([
         dbc.Label("Choose Dietary Preferences"),
         dbc.Checklist(
             options=[
@@ -249,16 +209,18 @@ dbc.FormGroup([
         ),
         html.Br(),
         html.Div(
-            dcc.Input(id='input-on-submit2', placeholder="Type in your ingredients separated by coma...", type='text',
+            dcc.Input(id='input-on-submit2', placeholder="Type in your ingredients separated by comma...", type='text',
                       style={'width': '30%'})),
+
         dbc.Button('Submit', color="success", id='submit-val2', n_clicks=0),
+
         html.Div(id='container-button-meal-plan', children=''),
-
-        # # Hyperlink to /meal-planning which opens in a new tab
-        # dcc.Link('Navigate to "/meal-planning"', href='/meal-planning', target="blank"),
+        html.Br(),
+        dcc.Link('Go back', href='/', target="blank"),
     ])
-
 ])
+
+# Layout of the /meal-planning page
 
 
 def serve_layout():
@@ -281,9 +243,7 @@ def display_page(pathname):
     if pathname == "/meal-planning":
         return layout_meal_planning
     else:
-        print("app layout")
         return app_layout
-
 
 
 @app.callback(
@@ -293,8 +253,12 @@ def display_page(pathname):
      dash.dependencies.Input("checklist-input-cuisine", "value")],
     [dash.dependencies.State('input-on-submit1', 'value')]
 )
-def on_click(n_clicks, diet_value, cuisine_value, value):
-    print("hello world", diet_value,cuisine_value)#, meal_plan)
+def on_submit_click(n_clicks, diet_value, cuisine_value, value):
+    # print("hello world", diet_value, cuisine_value, value)# meal_plan)
+
+    # Added because otherwise a random recipe was displayed on the website BEFORE submit button was pressed
+    if value == None:
+        return
 
     cuisine_total, diet_out = spoonacularapi.filters(cuisine_value, diet_value)
 
@@ -310,7 +274,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches.", color="success"),
+        dbc.Alert("See below for the best matches.", color="success", id="check-list"),
     ])
 
     nav = html.Div(
@@ -329,7 +293,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     )
 
     # Display images of the meals
-    app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
+    app.images = html.Div(children=[html.Img(src=recipe_names[2][0]),
                                      html.Img(src=recipe_names[2][1]),
                                      html.Img(src=recipe_names[2][2]),
                                      html.Img(src=recipe_names[2][3]),
@@ -386,7 +350,6 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     return suggestions, nav, app.images, app.bar_chart, app.horizontal_bar_chart
 
 
-
 @app.callback(
     dash.dependencies.Output('container-button-meal-plan', 'children'),
     [dash.dependencies.Input('submit-val2', 'n_clicks'),
@@ -395,10 +358,14 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     [dash.dependencies.State('input-on-submit2', 'value')]
 )
 def on_click(n_clicks, diet_value, cuisine_value, value):
-    print("hello world", diet_value,cuisine_value)#, meal_plan)
+    # print("hello world", diet_value,cuisine_value)#, meal_plan)
+
+    # Added because otherwise a random recipe was displayed on the website BEFORE submit button was pressed
+    if value == None:
+        return
 
     cuisine_total, diet_out= spoonacularapi.filters(cuisine_value, diet_value)
-    print(cuisine_total, diet_out, value, "inputs to api")
+    # print(cuisine_total, diet_out, value, "inputs to api")
     # if len(meal_plan)>= 1:  # then the switch box is switched
     #     recipe_return_value = 100   # meal plan requires maximum number of recipes to be filtered
     # else:
@@ -412,7 +379,8 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches.", color="success"),
+
+        dbc.Alert("See below for the best matches.", color="success", id="check-list"),
     ])
 
     nav = html.Div(
@@ -442,11 +410,11 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
             dbc.Label("Choose one"),
             dbc.RadioItems(
                 options=[
-                    {"label": '"'+ recipe_names[0][0]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[0]), "value": ingredients_tot[0] },
-                    {"label": '"'+recipe_names[0][1]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[1]), "value": ingredients_tot[1]},
-                    {"label": '"'+recipe_names[0][2]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[2]), "value": ingredients_tot[2]},
-                    {"label": '"'+recipe_names[0][3]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[3]), "value": ingredients_tot[3]},
-                    {"label": '"'+recipe_names[0][4]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[4]), "value": ingredients_tot[4]},
+                    {"label": '"' + recipe_names[0][0]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]), "value": ingredients_tot[0]},
+                    {"label": '"' + recipe_names[0][1]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[1]), "value": ingredients_tot[1]},
+                    {"label": '"' + recipe_names[0][2]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[2]), "value": ingredients_tot[2]},
+                    {"label": '"' + recipe_names[0][3]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[3]), "value": ingredients_tot[3]},
+                    {"label": '"' + recipe_names[0][4]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[4]), "value": ingredients_tot[4]},
                 ],
                 value=[],
                 id="radioitems-choice-1",
@@ -456,38 +424,13 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     button = html.Div(
         [
-            dbc.Button("Decision made!", id="example-button", className="mr-2"),
+            dbc.Button("Decision made!", id="example-button", color="success", className="mr-2"),
             html.Span(id="example-output", style={"vertical-align": "middle"}),
         ]
     )
-    #choice=on_form_change
-    #print(choice)
-    # unused_ingred=spoonacularapi.unused_ingr(value, ingredients_tot[2])
-    # print(unused_ingred)
 
+    return suggestions, nav, app.images, radioitems, button
 
-
-    # call a function that finds what this recipe is missing
-
-
-
-    # Display a bar chart showing nutritional value of the recipes
-    # choice_1=dbc.FormGroup([
-    #     dbc.Label("Choose Dietary Preferences"),
-    #     dbc.Checklist(
-    #         options=[
-    #             {"label": "recipe1", "value": 1},
-    #             {"label": "recipe1", "value": 2},
-    #             {"label": "recipe1", "value": 3},
-    #             {"label": "recipe1", "value": 4},
-    #             {"label": "recipe1", "value": 5},
-    #         ],
-    #         value=[],
-    #         id="choice_1",
-    #     ),
-    # ]),
-
-    return suggestions, nav, app.images, radioitems, button#,, choice_1
 
 @app.callback(
     dash.dependencies.Output("example-output", "children"),
@@ -498,24 +441,22 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     ],
     [dash.dependencies.State('input-on-submit2', 'value')]
 )
+def on_meal_planning_click(choice, diet_value, cuisine_value, value):
+    # print(choice, type(choice), value)
 
+    # Added because otherwise a random recipe was displayed on the website BEFORE submit button was pressed
+    if value == None:
+        return
 
-def on_click(choice,diet_value, cuisine_value, value):
-    print(choice, type(choice), value)
-
-    unused_ingred=spoonacularapi.unused_ingr(value, choice)
+    unused_ingred = spoonacularapi.unused_ingr(value, choice)
     unused = ', '.join(unused_ingred)
     cuisine_total, diet_out = spoonacularapi.filters(cuisine_value, diet_value)
-    print(cuisine_total, diet_out, value, "inputs to api")
-    # if len(meal_plan)>= 1:  # then the switch box is switched
-    #     recipe_return_value = 100   # meal plan requires maximum number of recipes to be filtered
-    # else:
+
     recipe_return_value = 5  # normal operation requires top 5 recipes
 
     ingredients_tot, recipe_names, id_array, source_url, image = spoonacularapi.get_recipes(cuisine_total, diet_out,
                                                                                             unused, recipe_return_value)
 
-    # recipe_names = spoonacularapi.retrieve_data(value)
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
     suggestions2 = html.Div([
@@ -544,8 +485,9 @@ def on_click(choice,diet_value, cuisine_value, value):
                                     html.Img(src=recipe_names[2][2]),
                                     html.Img(src=recipe_names[2][3]),
                                     html.Img(src=recipe_names[2][4])])
-    print("ended up at the end ")
+    # print("ended up at the end ")
     return suggestions2, nav2, app.images2
+
 
 if __name__ == '__main__':
     app.run_server(debug=False, dev_tools_ui=False, dev_tools_props_check=False)

@@ -196,6 +196,7 @@ def max_ingredients(ingredients_results, ingredients, title_array, id_array):
     #     matches_array.append(match)
     #     print(matches_array)
 
+
 def unused_ingr(ingredients, ingredient_result):
     print(ingredient_result, ingredients)
     ingredients_user = ingredients.split(",")
@@ -222,9 +223,6 @@ def unused_ingr(ingredients, ingredient_result):
 
         print(intersec_index, unused)
     return unused
-
-
-
 
 
 def complete_search(to_complete): # produces variants on one ingredients so that they can be matched to the list of ingredients recipes
