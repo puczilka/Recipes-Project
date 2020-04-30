@@ -1,3 +1,5 @@
+import os
+from random import randint
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
@@ -7,10 +9,11 @@ import plotly.graph_objs as go
 import flask
 from dash.dependencies import Input, Output
 
+server = flask.Flask(__name__)
+server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
+app = dash.Dash(__name__, server=server)
 
 print(dcc.__version__) # 0.6.0 or above is required
-
-app = dash.Dash(__name__)
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -24,10 +27,43 @@ url_bar_and_content_div = html.Div([
 ])
 
 app_layout = html.Div([
-    dbc.Alert("Type in your ingredients and select preferences.", color="success"),
+    dbc.Jumbotron(
+        [
+            dbc.Container(
+                [
+                    html.H1("Welcome to Food PlanIT", className="display-3"),
+                    html.P(
+                        "This project was created to help people meal plan and reduce panic buying. ",
+                        className="lead", id="check-list",
+                    ),
+                    html.Br(),
+                    html.P(
+                        "You can either: ",
+                        className="lead",
+                    ),
+                    html.P(
+                        "1. Use this website to type in your main ingredients to get recipe ideas",
+                        className="lead",
+                    ),
+                    html.P(
+                        "2. Use the link below to type in more than 10 ingredients to have a Meal Plan generated",
+                        className="lead",
+                    ),
+                    # Hyperlink to /meal-planning which opens in a new tab
+                    dcc.Link('Link to Meal Planning', href='/meal-planning', target="blank", id="navigate"),
+                ],
+                id="jumbotron",
+                fluid=True,
+            )
+        ],
+        fluid=True,
+        id="jumbotronBox",
+    ),
+
+    dbc.Alert("Type in your ingredients and select preferences.", color="success", id="check-list"),
 
     dbc.FormGroup([
-        dbc.Label("Choose Dietary Preferences"),
+        dbc.Label("Choose Dietary Preferences", id="check-list"),
         dbc.Checklist(
             options=[
                 {"label": "Vegan", "value": 1},
@@ -42,7 +78,7 @@ app_layout = html.Div([
     ]),
 
     dbc.FormGroup([
-        dbc.Label("Choose cuisines to exclude"),
+        dbc.Label("Choose cuisines to exclude", id="check-list"),
         dbc.Checklist(
             options=[
                 {"label": "African", "value": 1},
@@ -79,20 +115,18 @@ app_layout = html.Div([
             inline=True
         ),
         html.Br(),
+
         html.Div(
             dcc.Input(id='input-on-submit1', placeholder="Type in your ingredients separated by coma...", type='text',
                       style={'width': '30%'})),
         dbc.Button('Submit', color="success", id='submit-val', n_clicks=0),
         html.Div(id='container-button-basic', children=''),
-
-        # Hyperlink to /meal-planning which opens in a new tab
-        dcc.Link('Navigate to "/meal-planning"', href='/meal-planning', target="blank"),
     ])
 ])
 
 # Layout of the /meal-planning page
 layout_meal_planning = html.Div([
-    dbc.Alert("Check out your Meal Plan below!", color="success"),
+    dbc.Alert("Check out your Meal Plan below!", color="success", id="check-list"),
     html.Br(),
     dcc.Link('Go back', href='/', target="blank"),
 dbc.FormGroup([
@@ -196,7 +230,7 @@ def display_page(pathname):
 def on_click(n_clicks, diet_value, cuisine_value, value):
     print("hello world", diet_value,cuisine_value)#, meal_plan)
 
-    cuisine_total, diet_out= spoonacularapi.filters(cuisine_value, diet_value)
+    cuisine_total, diet_out = spoonacularapi.filters(cuisine_value, diet_value)
 
     # if len(meal_plan)>= 1:  # then the switch box is switched
     #     recipe_return_value = 100   # meal plan requires maximum number of recipes to be filtered
@@ -449,3 +483,4 @@ def on_click(choice,diet_value, cuisine_value, value):
 
 if __name__ == '__main__':
     app.run_server(debug=False, dev_tools_ui=False, dev_tools_props_check=False)
+    app.server.run(threaded=True, debug=False)
