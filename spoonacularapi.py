@@ -1,6 +1,7 @@
 import requests
 import json
 from collections import Counter
+import re
 
 
 def filters(cuisine, diet_value):
@@ -68,7 +69,7 @@ def filters(cuisine, diet_value):
 
 def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
     url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex"
-
+    print(ingredients, recipe_return_value)
     # querystring = {"includeIngredients":"onions%2Clettuce%2Ctomato","instructionsRequired":"true", "addRecipeInformation":"false","ranking":"1",
     #               "sort":"max-used-ingredients","sortDirection": "desc","limitLicense":"false","offset":"0","number":"50"}
 
@@ -81,6 +82,7 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
     querystring = {"cuisine": cuisine_in,
                    "includeIngredients": ingredients, "addRecipeInformation": "true",
                    "sort": "popularity",
+                   "fillIngredients": True,
                    "diet": diet_in,
                    "ignorePantry": "false", "limitLicense": "false", "offset": "0", "number": recipe_return_value}
 
@@ -95,7 +97,7 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
     options_json=response.json()
 
     # print(response.text)
-    # print(options_json['results'])
+    print(options_json['results'])
 
     ingredients_tot = []
     title_array = []
@@ -193,6 +195,36 @@ def max_ingredients(ingredients_results, ingredients, title_array, id_array):
     #         match= match + ingredients_results[i].count(ingredients_user[j])
     #     matches_array.append(match)
     #     print(matches_array)
+
+def unused_ingr(ingredients, ingredient_result):
+    print(ingredient_result, ingredients)
+    ingredients_user = ingredients.split(",")
+    intersec_index=[]
+    unused=[]
+    for i in range(len(ingredients_user)):
+        # for each ingredient input from the user, find variations
+
+        completed_ingr = complete_search(ingredients_user[i])
+        # find whether the ingredients alternative is in this,
+        # use intersection and if there is a an intersection add the index to the list
+        intersection_recipe=list(set(ingredient_result).intersection(set(completed_ingr)))
+        print(ingredients_user[i], intersection_recipe)
+        #map(lambda d: re.search("pepper", d), txt)
+        x = list(map(lambda d: re.search(str.strip(ingredients_user[i]), d), ingredient_result))
+
+        print(x, all(v is None for v in x))
+        if len(intersection_recipe) != 0:
+            intersec_index.append(ingredients_user[i])
+        elif not all(v is None for v in x):
+            intersec_index.append(ingredients_user[i])
+        else:
+            unused.append(ingredients_user[i])
+
+        print(intersec_index, unused)
+    return unused
+
+
+
 
 
 def complete_search(to_complete): # produces variants on one ingredients so that they can be matched to the list of ingredients recipes
