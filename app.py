@@ -28,35 +28,54 @@ url_bar_and_content_div = html.Div([
 
 app_layout = html.Div([
     dbc.Jumbotron(
+
+
         [
             dbc.Container(
                 [
-                    html.H1("Welcome to Food PlanIT", className="display-3"),
+
+                    html.H1("Welcome to PlanIt Food ", className="display-3",style={'color': 'white', 'fontSize': 50}),
                     html.P(
-                        "This project was created to help people meal plan and reduce panic buying. ",
-                        className="lead", id="check-list",
+                        "Reduce waste, save time and PlanIt",
+                        className="lead", id="check-list", style={'color': 'white', 'fontSize': 25}
                     ),
                     html.Br(),
+
                     html.P(
-                        "You can either: ",
-                        className="lead",
+                        "Type in your main ingredients to get recipe ideas",
+                        className="lead",style={'color': 'white', 'fontSize': 20},
+                    ),
+
+                    html.P(
+                        "OR",
+                        className="lead",style={'color': 'white', 'fontSize': 20},
                     ),
                     html.P(
-                        "1. Use this website to type in your main ingredients to get recipe ideas",
-                        className="lead",
-                    ),
-                    html.P(
-                        "2. Use the link below to type in more than 10 ingredients to have a Meal Plan generated",
-                        className="lead",
+                        "Go to link to generate a Meal Plan",
+                        className="lead", style={'color': 'white', 'fontSize': 20},
                     ),
                     # Hyperlink to /meal-planning which opens in a new tab
-                    dcc.Link('Link to Meal Planning', href='/meal-planning', target="blank", id="navigate"),
+                    dcc.Link('Link to Meal Planning', href='/meal-planning', target="blank", id="navigate",style={'color': 'white', 'fontSize': 30})
+
+                    # html.Div(
+                    #     [
+                    #     html.Img(src='https://images.freeimages.com/images/large-previews/c3a/good-food-1497168.jpg')
+                    #     ],
+
+                    #)
+
+                    # html.Div(
+                    #     style="background-image: url(https://images.freeimages.com/images/large-previews/c3a/good-food-1497168.jpg); background-size: 100%;"
+                    # ),
+
                 ],
                 id="jumbotron",
+                style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%','backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left', 'backgroundSize': 'cover'},#, 'position': 'fixed'},
                 fluid=True,
             )
         ],
         fluid=True,
+
         id="jumbotronBox",
     ),
 
@@ -126,6 +145,53 @@ app_layout = html.Div([
 
 # Layout of the /meal-planning page
 layout_meal_planning = html.Div([
+dbc.Jumbotron(
+
+
+        [
+            dbc.Container(
+                [
+                    html.H1("Welcome to PlanIt Food", className="display-3",style={'color': 'white', 'fontSize': 50}),
+                    html.P(
+                        "Reduce waste, save time and PlanIt "
+                        "You have been taken to Meal plan! ",
+                        className="lead", id="check-list", style={'color': 'white', 'fontSize': 30}
+                    ),
+                    html.Br(),
+                    html.P(
+                        "To go back click on link below ",
+                        className="lead", style={'color': 'white', 'fontSize': 20},
+                    ),
+                    dcc.Link('Go back', href='/', target="blank", style={'color': 'white', 'fontSize': 20}),
+
+                    html.P(
+                        "Generate your meal plan by typing in at least 10 of your ingredients",
+                        className="lead", style={'color': 'white', 'fontSize': 20},
+                    ),
+                    # Hyperlink to /meal-planning which opens in a new tab
+
+                    # html.Div(
+                    #     [
+                    #     html.Img(src='https://images.freeimages.com/images/large-previews/c3a/good-food-1497168.jpg')
+                    #     ],
+
+                    #)
+
+                    # html.Div(
+                    #     style="background-image: url(https://images.freeimages.com/images/large-previews/c3a/good-food-1497168.jpg); background-size: 100%;"
+                    # ),
+
+                ],
+                id="jumbotron",
+                style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%','backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left', 'backgroundSize': 'cover'},#, 'position': 'fixed'},
+                fluid=True,
+            )
+        ],
+        fluid=True,
+
+        id="jumbotronBox",
+    ),
+
     dbc.Alert("Check out your Meal Plan below!", color="success", id="check-list"),
     html.Br(),
     dcc.Link('Go back', href='/', target="blank"),
@@ -376,11 +442,11 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
             dbc.Label("Choose one"),
             dbc.RadioItems(
                 options=[
-                    {"label": recipe_names[0][0], "value": ingredients_tot[0] },
-                    {"label": recipe_names[0][1], "value": ingredients_tot[1]},
-                    {"label": recipe_names[0][2], "value": ingredients_tot[2]},
-                    {"label": recipe_names[0][3], "value": ingredients_tot[3]},
-                    {"label": recipe_names[0][4], "value": ingredients_tot[4]},
+                    {"label": '"'+ recipe_names[0][0]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[0]), "value": ingredients_tot[0] },
+                    {"label": '"'+recipe_names[0][1]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[1]), "value": ingredients_tot[1]},
+                    {"label": '"'+recipe_names[0][2]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[2]), "value": ingredients_tot[2]},
+                    {"label": '"'+recipe_names[0][3]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[3]), "value": ingredients_tot[3]},
+                    {"label": '"'+recipe_names[0][4]+'"'+ " uses the ingredients: " + ', '.join(ingredients_tot[4]), "value": ingredients_tot[4]},
                 ],
                 value=[],
                 id="radioitems-choice-1",
@@ -438,7 +504,7 @@ def on_click(choice,diet_value, cuisine_value, value):
     print(choice, type(choice), value)
 
     unused_ingred=spoonacularapi.unused_ingr(value, choice)
-    unused = ','.join(unused_ingred)
+    unused = ', '.join(unused_ingred)
     cuisine_total, diet_out = spoonacularapi.filters(cuisine_value, diet_value)
     print(cuisine_total, diet_out, value, "inputs to api")
     # if len(meal_plan)>= 1:  # then the switch box is switched
@@ -454,7 +520,7 @@ def on_click(choice,diet_value, cuisine_value, value):
 
     suggestions2 = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches.", color="success"),
+        dbc.Alert("See below for the best matches using the remaining ingredients." + unused, color="success"),
     ])
 
     nav2 = html.Div(
