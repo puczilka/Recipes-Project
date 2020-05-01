@@ -152,7 +152,9 @@ layout_meal_planning = html.Div([
         id="jumbotronBoxplan",
     ),
 
+
     #dbc.Alert("Type in 10 ingredients below to generate a Meal Plan!", color="success", id="check-list"),
+
 
     html.Br(),
 
@@ -216,8 +218,8 @@ layout_meal_planning = html.Div([
         html.Br(),
 
         dbc.Button('Submit', color="success", id='submit-val2', n_clicks=0),
-
         html.Div(id='container-button-meal-plan', children=''),
+
         html.Br(),
         dcc.Link('Go back', href='/', target="blank"),
     ])
@@ -275,6 +277,10 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
 
     # recipe_names = spoonacularapi.retrieve_data(value)
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
+
+    if len(recipe_names[0]) < 4:
+        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning",
+                  id="check-list")
 
     suggestions = html.Div([
         html.Br(),
@@ -481,13 +487,15 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     # recipe_names = spoonacularapi.retrieve_data(value)
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
+    if len(recipe_names[0]) < 4:
+        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning",
+                  id="check-list")
+
     suggestions = html.Div([
         html.Br(),
 
-
-
         dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="light", id="check-list"),
-
+        html.Br(),
     ])
     polaroid2 = html.Div([
 
@@ -589,7 +597,8 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     radioitems = dbc.FormGroup(
         [
-            dbc.Label("Choose one"),
+            html.Br(),
+            dbc.Alert("Choose one recipe", color="success", id="check-list"),
             dbc.RadioItems(
                 options=[
                     {"label": '"' + recipe_names[0][0]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]), "value": ingredients_tot[0]},
@@ -603,20 +612,27 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
             ),
         ]
     )
+    html.Br(),
 
     button = html.Div(
         [
+<<<<<<< HEAD
             dbc.Button("Decision made!", id="decision-button", className="mr-2"),
             html.Span(id="example-output", style={"vertical-align": "middle"}),
             html.Br()
+=======
+            dbc.Button("Decision made!", id="example-button", color="success", className="mr-2"),
+            html.Div(id='container-button-basic', children=''),
+>>>>>>> e61794256548a0a661c9b86a0c55f3a7fedd1e89
         ]
     )
+    html.Br(),
 
     return suggestions, polaroid2, radioitems, button
 
 
 @app.callback(
-    dash.dependencies.Output("example-output", "children"),
+    dash.dependencies.Output("container-button-basic", "children"),
     [
         dash.dependencies.Input("decision-button", "n_clicks"),
         dash.dependencies.Input("radioitems-choice-1", "value"),
@@ -648,7 +664,11 @@ def on_meal_planning_click(n_clicks, choice, diet_value, cuisine_value, value):
 
     suggestions2 = html.Div([
         html.Br(),
+<<<<<<< HEAD
         dbc.Alert("See below for the best matches using the remaining ingredients." + unused, color="light"),
+=======
+        dbc.Alert("See below for the best matches using the remaining ingredients: " + unused, color="success"),
+>>>>>>> e61794256548a0a661c9b86a0c55f3a7fedd1e89
     ])
 
     # nav2 = html.Div(
