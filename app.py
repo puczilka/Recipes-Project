@@ -31,25 +31,25 @@ app_layout = html.Div([
         [
             dbc.Container(
                 [
-                    html.H1("Welcome to PlanIt Food ", className="display-3", style={'color': 'white', 'fontSize': 50}),
+                    html.H1("Welcome to PlanIt Food ", className="display-3", style={'color': 'white', 'fontSize': 50,'font-family':'Palatino Linotype'}),
                     html.P(
                         "Reduce waste, save time and PlanIt",
-                        className="lead", id="check-list", style={'color': 'white', 'fontSize': 25}
+                        className="lead", style={'color': 'white', 'fontSize': 25, 'font-family':'Palatino Linotype'}
                     ),
                     html.Br(),
 
                     html.P(
                         "Type in your main ingredients to get recipe ideas",
-                        className="lead",style={'color': 'white', 'fontSize': 20},
+                        className="lead",style={'color': 'white', 'fontSize': 20,'font-family':'Palatino Linotype'},
                     ),
 
                     html.P(
                         "OR",
-                        className="lead",style={'color': 'white', 'fontSize': 20},
+                        className="lead",style={'color': 'white', 'fontSize': 20,'font-family':'Palatino Linotype'},
                     ),
 
                     # Hyperlink to /meal-planning which opens in a new tab
-                    dcc.Link('Click here to go to Meal Planning', href='/meal-planning', target="blank", id="navigate", style={'color': 'white', 'fontSize': 20})
+                    dcc.Link('Click here to go to Meal Planning', href='/meal-planning', target="blank", id="navigate", style={'color': 'white', 'fontSize': 20,'font-family':'Palatino Linotype'})
                 ],
                 id="jumbotron",
                 fluid=True,
@@ -116,6 +116,7 @@ app_layout = html.Div([
         html.Div(
             dcc.Input(id='input-on-submit1', placeholder="Type in your ingredients separated by comma...", type='text',
                       style={'width': '50%', 'display':'inline-block'})),
+        html.Br(),
         dbc.Button('Submit', id='submit-val', n_clicks=0),
 
         html.Br(),
@@ -131,18 +132,18 @@ layout_meal_planning = html.Div([
         [
             dbc.Container(
                 [
-                    html.H1("Meal Planning Tool", className="display-3", style={'color': 'white', 'fontSize': 50}),
+                    html.H1("Meal Planning Tool", className="display-3", style={'color': 'white', 'fontSize': 50,'font-family':'Palatino Linotype'}),
                     html.P(
                         "Reduce waste, save time and PlanIt ",
-                        className="lead", style={'color': 'white', 'fontSize': 30}
+                        className="lead", style={'color': 'white', 'fontSize': 30,'font-family':'Palatino Linotype'}
                     ),
                     html.Br(),
                     html.P(
                         "Generate your meal plan by typing in at least 10 ingredients",
-                        className="lead", style={'color': 'white', 'fontSize': 20},
+                        className="lead", style={'color': 'white', 'fontSize': 20,'font-family':'Palatino Linotype'},
                     ),
                     html.Br(),
-                    dcc.Link('Click here to go back', href='/', target="blank", style={'color': 'white', 'fontSize': 20}),
+                    dcc.Link('Click here to go back', href='/', target="blank", style={'color': 'white', 'fontSize': 20,'font-family':'Palatino Linotype'}),
                 ],
                 id="jumbotron",
                 style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%', 'backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left', 'backgroundSize': 'cover'},#, 'position': 'fixed'},
@@ -209,7 +210,7 @@ layout_meal_planning = html.Div([
         html.Div(
             dcc.Input(id='input-on-submit2', placeholder="Type in your ingredients separated by comma...", type='text',
                       style={'width': '50%'})),
-
+        html.Br(),
         dbc.Button('Submit', id='submit-val2', n_clicks=0),
         html.Br(),
         html.Br(),
