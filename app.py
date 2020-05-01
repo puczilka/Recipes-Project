@@ -262,7 +262,6 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
 
     ingredients_tot, recipe_names, id_array, source_url, image = spoonacularapi.get_recipes(cuisine_total, diet_out, value, recipe_return_value)
 
-    # recipe_names = spoonacularapi.retrieve_data(value)
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
     if len(recipe_names[0]) < 4:
@@ -272,7 +271,7 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
     suggestions3 = html.Div([
         html.Br(),
         html.Br(),
-        dbc.Alert("See below for the best matches.", color="success", id="check-list"),
+        dbc.Alert("See below for the best matches. You can click on the recipe name for the recipe.", color="success", id="check-list"),
     ])
 
     polaroid = html.Div([
@@ -422,7 +421,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches. Click on the recipe name for the recipe.", color="success", id="check-list"),
+        dbc.Alert("See below for the best matches. You can click on the recipe name for the recipe.", color="success", id="check-list"),
     ])
 
     polaroid2 = html.Div([
@@ -494,7 +493,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     radioitems = dbc.FormGroup(
         [
             html.Br(),
-            dbc.Alert("Choose one recipe from the list below", color="success", id="check-list"),
+            dbc.Alert("Choose one recipe from the list below and we will suggest other recipes.", color="success", id="check-list"),
             dbc.RadioItems(
                 options=[
                     {"label": '"' + recipe_names[0][0] + '"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]),
