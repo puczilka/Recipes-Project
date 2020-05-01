@@ -12,12 +12,11 @@ from dash.dependencies import Input, Output
 
 server = flask.Flask(__name__)
 server.secret_key = os.environ.get('secret_key', str(randint(0, 1000000)))
-app = dash.Dash(__name__, server=server)
 
 print(dcc.__version__) # 0.6.0 or above is required
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP], server=server)
 
 app.config.suppress_callback_exceptions = True
 
@@ -732,5 +731,4 @@ def on_meal_planning_click(choice, diet_value, cuisine_value, value):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False, dev_tools_ui=False, dev_tools_props_check=False)
     app.server.run(threaded=True, debug=False)
