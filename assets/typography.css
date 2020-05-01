@@ -66,7 +66,6 @@ h1, h2, h3, h4, h5, h6 {
     text-align: left;
 }
 
-
 #jumbotronBoxmain {
     background-image:url('https://images.pexels.com/photos/594060/pexels-photo-594060.jpeg');
     background-color: green;
@@ -92,7 +91,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 23%;
   background-color: white;
   overflow:auto;
-  padding-top:5px;
+  padding-top:2px;
   padding-left:5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
@@ -103,6 +102,7 @@ h1, h2, h3, h4, h5, h6 {
   width:100%;
   padding: 10px;
 }
+
 
 
 

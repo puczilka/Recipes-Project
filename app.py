@@ -60,7 +60,7 @@ app_layout = html.Div([
     ),
 
     dbc.FormGroup([
-        dbc.Label("Choose Dietary Preferences", id="check-list"),
+        dbc.Alert("Choose dietary preferences", color="success", id="check-list"),
         dbc.Checklist(
             options=[
                 {"label": "Vegan", "value": 1},
@@ -75,7 +75,7 @@ app_layout = html.Div([
     ]),
 
     dbc.FormGroup([
-        dbc.Label("Choose cuisines to exclude", id="check-list"),
+        dbc.Alert("Choose cuisines to exclude", color="success", id="check-list"),
         dbc.Checklist(
             options=[
                 {"label": "African", "value": 1},
@@ -115,11 +115,15 @@ app_layout = html.Div([
 
         html.Div(
             dcc.Input(id='input-on-submit1', placeholder="Type in your ingredients separated by comma...", type='text',
-                      style={'width': '50%', 'display':'inline-block'})), dbc.Button('Submit', id='submit-val', n_clicks=0),
+                      style={'width': '50%', 'display':'inline-block'})),
+        dbc.Button('Submit', id='submit-val', n_clicks=0),
 
         html.Br(),
 
         html.Div(id='container-button-basic', style={'display':'inline-block'}, children=''),
+        html.Br(),
+        html.Br(),
+        html.Br(),
     ])
 ])
 
@@ -150,10 +154,8 @@ layout_meal_planning = html.Div([
         id="jumbotronBoxplan",
     ),
 
-    html.Br(),
-
     dbc.FormGroup([
-        dbc.Label("Choose Dietary Preferences"),
+        dbc.Alert("Choose Dietary Preferences", color="success", id="check-list"),
         dbc.Checklist(
             options=[
                 {"label": "Vegan", "value": 1},
@@ -168,7 +170,7 @@ layout_meal_planning = html.Div([
     ]),
 
     dbc.FormGroup([
-        dbc.Label("Choose cuisines to exclude"),
+        dbc.Alert("Choose cuisines to exclude", color="success", id="check-list"),
         dbc.Checklist(
             options=[
                 {"label": "African", "value": 1},
@@ -270,7 +272,7 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
     suggestions = html.Div([
         html.Br(),
         html.Br(),
-        dbc.Alert("See below for the best matches.", color="light", id="check-list"),
+        dbc.Alert("See below for the best matches.", color="success", id="check-list"),
     ])
 
     polaroid = html.Div([
@@ -420,8 +422,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="light", id="check-list"),
-        html.Br(),
+        dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="success", id="check-list"),
     ])
 
     polaroid2 = html.Div([
@@ -492,7 +493,8 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     radioitems = dbc.FormGroup(
         [
-            dbc.Alert("Choose one recipe", color="success"),
+            html.Br(),
+            dbc.Alert("Choose one recipe from the list below", color="success", id="check-list"),
             dbc.RadioItems(
                 options=[
                     {"label": '"' + recipe_names[0][0] + '"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]),
@@ -556,13 +558,10 @@ def on_meal_planning_click(n_clicks, choice, diet_value, cuisine_value, value):
 
     suggestions2 = html.Div([
         html.Br(),
-
-        dbc.Alert("See below for the best matches using the remaining ingredients: " + unused, color="light"),
-
+        dbc.Alert("See below for the best matches using the remaining ingredients: " + unused, color="success", id="check-list"),
     ])
 
     polaroid3 = html.Div([
-
         dbc.Row(
             [
                 html.Div([
