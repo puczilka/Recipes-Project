@@ -144,6 +144,7 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
     return ingredients_tot, title_array, id_array, source_url, image
 
 
+
 def max_ingredients(ingredients_results, ingredients, title_array, id_array):
     # using Union operation using set theory you need
     ingredients_user = ingredients.split(",") # change to array
@@ -196,6 +197,59 @@ def max_ingredients(ingredients_results, ingredients, title_array, id_array):
     #     matches_array.append(match)
     #     print(matches_array)
 
+# def max_ingredients(ingredients_results, ingredients, title_array, id_array):
+#     # using Union operation using set theory you need
+#     ingredients_user = ingredients.split(",") # change to array
+#
+#     matches_array = []
+#
+#     print(ingredients_user)
+#     print(len(ingredients_results),len(ingredients_results[1]) )
+#
+#     intersection_recipe = []
+#     intersec_index = []
+#
+#     for i in range(len(ingredients_user)):
+#         # for each ingredient input from the user, find variations
+#
+#         completed_ingr = complete_search(ingredients_user[i])
+#
+#         for j in range(len(ingredients_results)):
+#             print(ingredients_results[j], ingredients_user[i])
+#
+#             # find whether the ingredients alternative is in this,
+#             # use intersection and if there is a an intersection add the index to the list
+#             intersection_recipe=list(set(ingredients_results[j]).intersection(set(completed_ingr)))
+#
+#             if len(intersection_recipe) != 0:
+#                 intersec_index.append(j)
+#
+#         print(intersec_index)
+#     # count the numbers that are repeated, and the more repeated the more the ingredients are used
+#
+#     intersec_dict = dict(Counter(intersec_index))
+#
+#     print(dict(Counter(intersec_index)))
+#
+#     # names=list(map(lambda d: d['name'], variation_json))
+#     # list(map(lambda d: d.value, intersec_index))
+#
+#     intersec_sort = sorted(intersec_dict.items(), key=lambda x: x[1], reverse=True)  # list of sets first value in this set is the index of recipe the original order that api returned
+#
+#     print(intersec_sort, len(intersec_sort) , type(intersec_sort[0]))
+#     print(id_array[0])
+#
+#     produce_output(intersec_sort, ingredients_results,id_array, title_array)
+#
+#     # for i in range(len(ingredients_results)):                       #matrix of ingredients
+#     #     match=0
+#     #     for j in range(len(ingredients_user)):                      #input of ingred from user
+#     #         print(ingredients_results[i],ingredients_user[j], ingredients_results[i].count(ingredients_user[j]) )
+#     #         match= match + ingredients_results[i].count(ingredients_user[j])
+#     #     matches_array.append(match)
+#     #     print(matches_array)
+
+
 def unused_ingr(ingredients, ingredient_result):
     print(ingredient_result, ingredients)
     ingredients_user = ingredients.split(",")
@@ -246,23 +300,37 @@ def complete_search(to_complete): # produces variants on one ingredients so that
     return names
 
 
-def produce_output(intersec_sort, ingredients_results, id_array, title_array): # return nutrition, included ingredients
-    # request API for the nutritional values:
+# def produce_output(intersec_sort, ingredients_results, id_array, title_array): # return nutrition, included ingredients
+#     # request API for the nutritional values:
+#
+#     # extract from the list of sets, only the amount of ingredients are repeated
+#     recipes_array = list(map(lambda d: list(d)[0], intersec_sort)) # the index of the recipe in order that it is sorted
+#     recipes_results = list(map(lambda d: title_array[d], recipes_array)) # order the recipes names according to the ingredients used
+#     exclIngredient = list((map(lambda d: len(ingredients_results[d]), recipes_array))) # calculate the number of unused ingredinets in the order of the used ingredients
+#     id_ordered = list(map(lambda d: id_array[d], recipes_array)) # order the ID number
+#
+#     # produce_output(id_ordered, )
+#     # put in a dictionary so it's easier to read
+#
+#     print(exclIngredient)
+#
+#     recipes_incIngredient = [dict(zip(recipes_results, list(map(lambda d:list(d)[1], intersec_sort))))] # returns a dictionary of {recipe name: ingredients used}
+#     recipes_exclIngredient = [dict(zip(recipes_results, list(map(lambda a, d: a-list(d)[1], exclIngredient, intersec_sort))))]
+#     recipes_ingredientRatio = [dict(zip(recipes_results, list(map(lambda d, a: (list(d)[1])/a, intersec_sort, exclIngredient))))] #ratio of used ingredients to total ingredients in recipe
+#
+#     print(recipes_incIngredient)
+#     print(recipes_exclIngredient)
+#     print(recipes_ingredientRatio)
+#
+#     recipes_nutrition = list(map(lambda f: nutrition(f), id_ordered))
+#
+#     # print(id_array, "==========================")
+#     nutrition(id_array[0])
+#     print(recipes_nutrition)
 
-    # extract from the list of sets, only the amount of ingredients are repeated
-    recipes_array = list(map(lambda d: list(d)[0], intersec_sort)) # the index of the recipe in order that it is sorted
-    recipes_results = list(map(lambda d: title_array[d], recipes_array)) # order the recipes names according to the ingredients used
-    exclIngredient = list((map(lambda d: len(ingredients_results[d]), recipes_array))) # calculate the number of unused ingredinets in the order of the used ingredients
-    id_ordered = list(map(lambda d: id_array[d], recipes_array)) # order the ID number
 
-    # produce_output(id_ordered, )
-    # put in a dictionary so it's easier to read
-
-    print(exclIngredient)
-
-    recipes_incIngredient = [dict(zip(recipes_results, list(map(lambda d:list(d)[1], intersec_sort))))] # returns a dictionary of {recipe name: ingredients used}
-    recipes_exclIngredient = [dict(zip(recipes_results, list(map(lambda a, d: a-list(d)[1], exclIngredient, intersec_sort))))]
-    recipes_ingredientRatio = [dict(zip(recipes_results, list(map(lambda d, a: (list(d)[1])/a, intersec_sort, exclIngredient))))] #ratio of used ingredients to total ingredients in recipe
+def retrieve_data(value):
+    url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
 
     print(recipes_incIngredient)
     print(recipes_exclIngredient)
@@ -277,6 +345,7 @@ def produce_output(intersec_sort, ingredients_results, id_array, title_array): #
 
 def retrieve_data(value):
     url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
+
 
     querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
 

@@ -119,6 +119,9 @@ app_layout = html.Div([
         html.Div(
             dcc.Input(id='input-on-submit1', placeholder="Type in your ingredients separated by comma...", type='text',
                       style={'width': '50%', 'display':'inline-block'})), dbc.Button('Submit', id='submit-val', n_clicks=0),
+
+        html.Br(),
+
         html.Div(id='container-button-basic', style={'display':'inline-block'}, children=''),
     ])
 ])
@@ -210,6 +213,8 @@ layout_meal_planning = html.Div([
             dcc.Input(id='input-on-submit2', placeholder="Type in your ingredients separated by comma...", type='text',
                       style={'width': '50%'})),
 
+        html.Br(),
+
         dbc.Button('Submit', color="success", id='submit-val2', n_clicks=0),
 
         html.Div(id='container-button-meal-plan', children=''),
@@ -252,7 +257,8 @@ def display_page(pathname):
     [dash.dependencies.State('input-on-submit1', 'value')]
 )
 def on_submit_click(n_clicks, diet_value, cuisine_value, value):
-    # print("hello world", diet_value, cuisine_value, value)# meal_plan)
+
+    # for one off recipe search
 
     # Added because otherwise a random recipe was displayed on the website BEFORE submit button was pressed
     if value == None:
@@ -272,7 +278,9 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches.", color="dark", id="check-list"),
+
+        dbc.Alert("See below for the best matches.", color="light", id="check-list"),
+
     ])
 
     # polaroid=html.Div([
@@ -476,7 +484,10 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     suggestions = html.Div([
         html.Br(),
 
-        dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="success", id="check-list"),
+
+
+        dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="light", id="check-list"),
+
     ])
     polaroid2 = html.Div([
 
@@ -595,8 +606,9 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     button = html.Div(
         [
-            dbc.Button("Decision made!", id="example-button", color="success", className="mr-2"),
+            dbc.Button("Decision made!", id="decision-button", className="mr-2"),
             html.Span(id="example-output", style={"vertical-align": "middle"}),
+            html.Br()
         ]
     )
 
@@ -606,22 +618,26 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 @app.callback(
     dash.dependencies.Output("example-output", "children"),
     [
+        dash.dependencies.Input("decision-button", "n_clicks"),
         dash.dependencies.Input("radioitems-choice-1", "value"),
         dash.dependencies.Input("checklist-input-diet2", "value"),
         dash.dependencies.Input("checklist-input-cuisine2", "value")
     ],
     [dash.dependencies.State('input-on-submit2', 'value')]
 )
-def on_meal_planning_click(choice, diet_value, cuisine_value, value):
+def on_meal_planning_click(n_clicks, choice, diet_value, cuisine_value, value):
+
+    if n_clicks is None:
+        return
     # print(choice, type(choice), value)
 
     # Added because otherwise a random recipe was displayed on the website BEFORE submit button was pressed
-    if value == None:
-        return
+
 
     unused_ingred = spoonacularapi.unused_ingr(value, choice)
     unused = ', '.join(unused_ingred)
     cuisine_total, diet_out = spoonacularapi.filters(cuisine_value, diet_value)
+
 
     recipe_return_value = 6  # normal operation requires top 5 recipes
 
@@ -632,7 +648,7 @@ def on_meal_planning_click(choice, diet_value, cuisine_value, value):
 
     suggestions2 = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches using the remaining ingredients." + unused, color="success"),
+        dbc.Alert("See below for the best matches using the remaining ingredients." + unused, color="light"),
     ])
 
     # nav2 = html.Div(
