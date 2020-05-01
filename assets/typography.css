@@ -1,20 +1,55 @@
 body {
     font-family: sans-serif;
     align-content: center;
+    background-color: snow;
     margin: 13px;
 }
 h1, h2, h3, h4, h5, h6 {
-    color: forestgreen;
+    color: darkgrey;
 }
 
 #recipe {
     align-content: center;
-    border-bottom: thin black solid;
-    background-color: honeydew;
+    color:black;
 }
 
 #submit-val {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
+    color: #494949 !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #ffffff;
+    padding: 5px;
+    border: 4px solid #494949 !important;
+    display: inline-block;
+    transition: all 0.4s ease 0s;
+    display: inline-block;float:left;
+}
+
+#submit-val2 {
+    margin-bottom: 5px;
+    color: #494949 !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #ffffff;
+    padding: 5px;
+    border: 4px solid #494949 !important;
+    display: inline-block;
+    transition: all 0.4s ease 0s;
+    display: inline-block;float:left;
+}
+
+#decision-button {
+    margin-bottom: 5px;
+    color: #494949 !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    background: #ffffff;
+    padding: 5px;
+    border: 4px solid #494949 !important;
+    display: inline-block;
+    transition: all 0.4s ease 0s;
+    display: inline-block;float:left;
 }
 
 #bar_chart {
@@ -28,14 +63,47 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #jumbotron {
-    text-align: center;
+    text-align: left;
 }
 
-#jumbotronBox {
-    background-color: linen;
+#jumbotronBoxmain {
+    background-image:url('https://images.pexels.com/photos/594060/pexels-photo-594060.jpeg');
+    background-color: green;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
+}
+
+#jumbotronBoxplan {
+    background-image:url('https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg');
+    background-color: grey;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100%;
 }
 
 #check-list {
     font-weight: bold;
+    color: black;
 }
+
+#polaroid{
+  width: 23%;
+  background-color: white;
+  overflow:auto;
+  padding-top:5px;
+  padding-left:5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+
+#container{
+  display: inline-block;
+  width:100%
+  padding: 10px
+}
+
+
+
+
 

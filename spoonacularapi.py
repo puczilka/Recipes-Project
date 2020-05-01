@@ -49,11 +49,11 @@ def filters(cuisine, diet_value):
 
         # print(cuisine_excl[i])
 
-    # print(cuisine_total)
+    print(cuisine_total)
 
-    diet = ["vegan", "vegetarian", "pescetarian", "gluten free", "ketogenic"]
-    diet_out = ''.join(list(map(lambda b: diet[b-1], diet_value)))
-    # print(diet_out)
+    diet=["vegan", "vegetarian", "pescetarian", "gluten free", "ketogenic"]
+    diet_out=''.join(list(map(lambda b: diet[b-1], diet_value)))
+    print(diet_out)
     return cuisine_total, diet_out
 
 # ===================================end function for formatting/inputting the cuisine================================
@@ -111,14 +111,14 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
         id = options_json['results'][i]['id']
         title = options_json['results'][i]['title']
         missed_ingr = options_json['results'][i]['missedIngredientCount']
-        used_ingr = options_json['results'][i]['usedIngredientCount']
+        used_ingr= options_json['results'][i]['usedIngredientCount']
         cuisines = options_json['results'][i]['cuisines']
         title_array.append(title)
         id_array.append(id)
         source_url.append(options_json['results'][i]['sourceUrl'])
         image.append(options_json['results'][i]['image'])
 
-        # print(title, missed_ingr, used_ingr, cuisines)
+        print(title, missed_ingr, used_ingr, cuisines)
         # get more info about the recipe: eg exact ingredient list and cooking time, serving time
 
         url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + str(id) + "/information"
@@ -140,62 +140,61 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
 
         ingredients_tot.append(ingredients_results)
 
-    # print(ingredients_tot, id_array)
+    print(ingredients_tot, id_array)
     return ingredients_tot, title_array, id_array, source_url, image
 
 
-def max_ingredients(ingredients_results, ingredients, title_array, id_array):
-    # using Union operation using set theory you need
-    ingredients_user = ingredients.split(",") # change to array
-
-    matches_array = []
-
-    print(ingredients_user)
-    print(len(ingredients_results),len(ingredients_results[1]) )
-
-    intersection_recipe = []
-    intersec_index = []
-
-    for i in range(len(ingredients_user)):
-        # for each ingredient input from the user, find variations
-
-        completed_ingr = complete_search(ingredients_user[i])
-
-        for j in range(len(ingredients_results)):
-            print(ingredients_results[j], ingredients_user[i])
-
-            # find whether the ingredients alternative is in this,
-            # use intersection and if there is a an intersection add the index to the list
-            intersection_recipe=list(set(ingredients_results[j]).intersection(set(completed_ingr)))
-
-            if len(intersection_recipe) != 0:
-                intersec_index.append(j)
-
-        print(intersec_index)
-    # count the numbers that are repeated, and the more repeated the more the ingredients are used
-
-    intersec_dict = dict(Counter(intersec_index))
-
-    print(dict(Counter(intersec_index)))
-
-    # names=list(map(lambda d: d['name'], variation_json))
-    # list(map(lambda d: d.value, intersec_index))
-
-    intersec_sort = sorted(intersec_dict.items(), key=lambda x: x[1], reverse=True)  # list of sets first value in this set is the index of recipe the original order that api returned
-
-    print(intersec_sort, len(intersec_sort) , type(intersec_sort[0]))
-    print(id_array[0])
-
-    produce_output(intersec_sort, ingredients_results,id_array, title_array)
-
-    # for i in range(len(ingredients_results)):                       #matrix of ingredients
-    #     match=0
-    #     for j in range(len(ingredients_user)):                      #input of ingred from user
-    #         print(ingredients_results[i],ingredients_user[j], ingredients_results[i].count(ingredients_user[j]) )
-    #         match= match + ingredients_results[i].count(ingredients_user[j])
-    #     matches_array.append(match)
-    #     print(matches_array)
-
+# def max_ingredients(ingredients_results, ingredients, title_array, id_array):
+#     # using Union operation using set theory you need
+#     ingredients_user = ingredients.split(",") # change to array
+#
+#     matches_array = []
+#
+#     print(ingredients_user)
+#     print(len(ingredients_results),len(ingredients_results[1]) )
+#
+#     intersection_recipe = []
+#     intersec_index = []
+#
+#     for i in range(len(ingredients_user)):
+#         # for each ingredient input from the user, find variations
+#
+#         completed_ingr = complete_search(ingredients_user[i])
+#
+#         for j in range(len(ingredients_results)):
+#             print(ingredients_results[j], ingredients_user[i])
+#
+#             # find whether the ingredients alternative is in this,
+#             # use intersection and if there is a an intersection add the index to the list
+#             intersection_recipe=list(set(ingredients_results[j]).intersection(set(completed_ingr)))
+#
+#             if len(intersection_recipe) != 0:
+#                 intersec_index.append(j)
+#
+#         print(intersec_index)
+#     # count the numbers that are repeated, and the more repeated the more the ingredients are used
+#
+#     intersec_dict = dict(Counter(intersec_index))
+#
+#     print(dict(Counter(intersec_index)))
+#
+#     # names=list(map(lambda d: d['name'], variation_json))
+#     # list(map(lambda d: d.value, intersec_index))
+#
+#     intersec_sort = sorted(intersec_dict.items(), key=lambda x: x[1], reverse=True)  # list of sets first value in this set is the index of recipe the original order that api returned
+#
+#     print(intersec_sort, len(intersec_sort) , type(intersec_sort[0]))
+#     print(id_array[0])
+#
+#     produce_output(intersec_sort, ingredients_results,id_array, title_array)
+#
+#     # for i in range(len(ingredients_results)):                       #matrix of ingredients
+#     #     match=0
+#     #     for j in range(len(ingredients_user)):                      #input of ingred from user
+#     #         print(ingredients_results[i],ingredients_user[j], ingredients_results[i].count(ingredients_user[j]) )
+#     #         match= match + ingredients_results[i].count(ingredients_user[j])
+#     #     matches_array.append(match)
+#     #     print(matches_array)
 
 def unused_ingr(ingredients, ingredient_result):
     print(ingredient_result, ingredients)
@@ -225,6 +224,9 @@ def unused_ingr(ingredients, ingredient_result):
     return unused
 
 
+
+
+
 def complete_search(to_complete): # produces variants on one ingredients so that they can be matched to the list of ingredients recipes
     url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/food/ingredients/autocomplete"
 
@@ -244,85 +246,55 @@ def complete_search(to_complete): # produces variants on one ingredients so that
     return names
 
 
-def produce_output(intersec_sort, ingredients_results, id_array, title_array): # return nutrition, included ingredients
-    # request API for the nutritional values:
+# def produce_output(intersec_sort, ingredients_results, id_array, title_array): # return nutrition, included ingredients
+#     # request API for the nutritional values:
+#
+#     # extract from the list of sets, only the amount of ingredients are repeated
+#     recipes_array = list(map(lambda d: list(d)[0], intersec_sort)) # the index of the recipe in order that it is sorted
+#     recipes_results = list(map(lambda d: title_array[d], recipes_array)) # order the recipes names according to the ingredients used
+#     exclIngredient = list((map(lambda d: len(ingredients_results[d]), recipes_array))) # calculate the number of unused ingredinets in the order of the used ingredients
+#     id_ordered = list(map(lambda d: id_array[d], recipes_array)) # order the ID number
+#
+#     # produce_output(id_ordered, )
+#     # put in a dictionary so it's easier to read
+#
+#     print(exclIngredient)
+#
+#     recipes_incIngredient = [dict(zip(recipes_results, list(map(lambda d:list(d)[1], intersec_sort))))] # returns a dictionary of {recipe name: ingredients used}
+#     recipes_exclIngredient = [dict(zip(recipes_results, list(map(lambda a, d: a-list(d)[1], exclIngredient, intersec_sort))))]
+#     recipes_ingredientRatio = [dict(zip(recipes_results, list(map(lambda d, a: (list(d)[1])/a, intersec_sort, exclIngredient))))] #ratio of used ingredients to total ingredients in recipe
+#
+#     print(recipes_incIngredient)
+#     print(recipes_exclIngredient)
+#     print(recipes_ingredientRatio)
+#
+#     recipes_nutrition = list(map(lambda f: nutrition(f), id_ordered))
+#
+#     # print(id_array, "==========================")
+#     nutrition(id_array[0])
+#     print(recipes_nutrition)
 
-    # extract from the list of sets, only the amount of ingredients are repeated
-    recipes_array = list(map(lambda d: list(d)[0], intersec_sort)) # the index of the recipe in order that it is sorted
-    recipes_results = list(map(lambda d: title_array[d], recipes_array)) # order the recipes names according to the ingredients used
-    exclIngredient = list((map(lambda d: len(ingredients_results[d]), recipes_array))) # calculate the number of unused ingredinets in the order of the used ingredients
-    id_ordered = list(map(lambda d: id_array[d], recipes_array)) # order the ID number
 
-    # produce_output(id_ordered, )
-    # put in a dictionary so it's easier to read
+def retrieve_data(value):
+    url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
 
-    print(exclIngredient)
+    querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
 
-    recipes_incIngredient = [dict(zip(recipes_results, list(map(lambda d:list(d)[1], intersec_sort))))] # returns a dictionary of {recipe name: ingredients used}
-    recipes_exclIngredient = [dict(zip(recipes_results, list(map(lambda a, d: a-list(d)[1], exclIngredient, intersec_sort))))]
-    recipes_ingredientRatio = [dict(zip(recipes_results, list(map(lambda d, a: (list(d)[1])/a, intersec_sort, exclIngredient))))] #ratio of used ingredients to total ingredients in recipe
+    headers = {
+        'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+        'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
+    }
 
-    print(recipes_incIngredient)
-    print(recipes_exclIngredient)
-    print(recipes_ingredientRatio)
-
-    recipes_nutrition = list(map(lambda f: nutrition(f), id_ordered))
-
-    # print(id_array, "==========================")
-    nutrition(id_array[0])
-    print(recipes_nutrition)
-
-
-def retrieve_data(value, diet, meal_type):
-
-    if diet != NULL:
-        url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search"
-
-        querystring = {"diet": diet, "query": value}  #"excludeIngredients": "coconut", "intolerances": "egg%2C gluten",
-
-        headers = {
-            'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-            'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01"
-        }
-
-        response1 = requests.request("GET", url, headers=headers, params=querystring)
-        recipes_data = response1.json()
-    elif meal_type != NULL:
-        url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search"
-
-        querystring = { "type": meal_type, "query": value}  #"excludeIngredients": "coconut", "intolerances": "egg%2C gluten",
-
-        headers = {
-            'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-            'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01"
-        }
-
-        response1 = requests.request("GET", url, headers=headers, params=querystring)
-        recipes_data = response1.json()
-
-    else:
-
-        url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients"
-
-        querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
-
-        headers = {
-            'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-            'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
-        }
-
-        response1 = requests.request("GET", url, headers=headers, params=querystring)
-        recipes_data = response1.json()
+    response1 = requests.request("GET", url, headers=headers, params=querystring)
+    recipes_data = response1.json()
 
     # Call the function which will return names, URLs, images and nutritional information for Dash
     return get_name_url_nutrients(recipes_data, value)
 
-
-# id_array, recipe_names, source_url, image, value
+#id_array, recipe_names, source_url, image,  value
 def get_name_url_nutrients(ids,titles,url_links,images, value):
-    # print(ids, ' ids here in nutrients')
-
-    querystring = {"number": "5", "ranking": "1", "ignorePantry": "false", "ingredients": value}
+    print(ids, ' ids here in nutrients')
+    querystring = {"number": "6", "ranking": "1", "ignorePantry": "false", "ingredients": value}
 
     headers = {
         'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
@@ -344,6 +316,8 @@ def get_name_url_nutrients(ids,titles,url_links,images, value):
     #     ids.append(hit["id"])
     #     images.append(hit["image"])
 
+
+
     for id in ids:
         # Get more information about each recipe by calling the API with IDs
         # url_1 = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/" + str(id) + "/information"
@@ -356,7 +330,7 @@ def get_name_url_nutrients(ids,titles,url_links,images, value):
         response3 = requests.request("GET", url_2, headers=headers, params=querystring)
         response3_json = response3.json()
 
-        # Get specific nutritional information about fats, carbs, proteins and calories
+        # Get specific nutritional information about fats, carbs and proteins
         response_fat_no_units = response3_json["fat"][:-1]
         recipe_fat_list.append(response_fat_no_units)
 
@@ -371,7 +345,7 @@ def get_name_url_nutrients(ids,titles,url_links,images, value):
 
     recipe_calories_list.sort()
 
-    # Return names, urls, images and information about nutrients (fat, carbs, proteins and calories)
+    # Return names, urls, images and information about nutrients (fat, carbs and protein)
     return [titles, url_links, images, recipe_fat_list, recipe_carbs_list, recipe_protein_list, recipe_calories_list]
 
 
