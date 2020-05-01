@@ -53,15 +53,15 @@ app_layout = html.Div([
                     dcc.Link('Click here to go to Meal Planning', href='/meal-planning', target="blank", id="navigate", style={'color': 'white', 'fontSize': 20})
                 ],
                 id="jumbotron",
-                style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%','backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left', 'backgroundSize': 'cover'},#, 'position': 'fixed'},
+                #style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%','max-width': '100%','height': '100%', 'backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left'},# 'backgroundSize': 'cover'},#, 'position': 'fixed'},
                 fluid=True,
             )
         ],
         fluid=True,
-        id="jumbotronBox",
+        id="jumbotronBoxmain",
     ),
 
-    dbc.Alert("Type in your ingredients and select preferences.", color="success", id="check-list"),
+    #dbc.Alert("Type in your ingredients and select preferences.", id="check-list"),
 
     dbc.FormGroup([
         dbc.Label("Choose Dietary Preferences", id="check-list"),
@@ -119,9 +119,8 @@ app_layout = html.Div([
 
         html.Div(
             dcc.Input(id='input-on-submit1', placeholder="Type in your ingredients separated by comma...", type='text',
-                      style={'width': '30%'})),
-        dbc.Button('Submit', color="success", id='submit-val', n_clicks=0),
-        html.Div(id='container-button-basic', children=''),
+                      style={'width': '50%', 'display':'inline-block'})), dbc.Button('Submit', id='submit-val', n_clicks=0),
+        html.Div(id='container-button-basic', style={'display':'inline-block'}, children=''),
     ])
 ])
 layout_meal_planning = html.Div([
@@ -148,10 +147,10 @@ layout_meal_planning = html.Div([
             )
         ],
         fluid=True,
-        id="jumbotronBox",
+        id="jumbotronBoxplan",
     ),
 
-    dbc.Alert("Type in 10 ingredients below to generate a Meal Plan!", color="success", id="check-list"),
+    #dbc.Alert("Type in 10 ingredients below to generate a Meal Plan!", color="success", id="check-list"),
 
     html.Br(),
 
@@ -210,7 +209,7 @@ layout_meal_planning = html.Div([
         html.Br(),
         html.Div(
             dcc.Input(id='input-on-submit2', placeholder="Type in your ingredients separated by comma...", type='text',
-                      style={'width': '30%'})),
+                      style={'width': '50%'})),
 
         dbc.Button('Submit', color="success", id='submit-val2', n_clicks=0),
 
@@ -265,7 +264,7 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
     # if len(meal_plan)>= 1:  # then the switch box is switched
     #     recipe_return_value = 100   # meal plan requires maximum number of recipes to be filtered
     # else:
-    recipe_return_value = 5   # normal operation requires top 5 recipes
+    recipe_return_value = 6   # normal operation requires top 5 recipes
 
     ingredients_tot, recipe_names, id_array, source_url, image = spoonacularapi.get_recipes(cuisine_total, diet_out, value, recipe_return_value)
 
@@ -274,30 +273,126 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches.", color="success", id="check-list"),
+        dbc.Alert("See below for the best matches.", color="dark", id="check-list"),
     ])
 
-    nav = html.Div(
-        [
-            dbc.Nav(
-                [
-                    dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-                    dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-                    dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-                    dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-                    dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
-                ]
-            ),
-            html.Br(),
-        ]
+    # polaroid=html.Div([
+    #
+    #     # dbc.Container(
+    #     #     [
+    #
+    #             html.Img(src=recipe_names[2][0], className="polaroid", id="polaroid",
+    #                      style={'image-width': '100%', 'width':'300px', }),
+    #             html.P('image 1', ),
+    #         # ],
+    #         # id='container'
+    #     # ),
+    #
+    # ],
+    #     className="polaroid",
+    #     id="polaroid",
+    # )
+    polaroid = html.Div([
+
+        dbc.Row(
+            [
+
+                html.Div([
+                html.Img(src=recipe_names[2][0], className="polaroid", id="polaroid",
+                         style={'image-width': '100%', 'width':'300px', }),
+                dbc.Nav([dbc.NavLink(recipe_names[0][0],
+                                     href=recipe_names[1][0], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin':'10px','width':'320px'}
+                ),
+
+
+
+                html.Div([
+                html.Img(src=recipe_names[2][1], className="polaroid", id="polaroid",
+                         style={'image-width': '100%', 'width':'300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][1],
+                                         href=recipe_names[1][1], id="recipe")]),
+                ],
+                    id='polaroid',style={'margin':'10px', 'width':'320px'}
+                ),
+
+
+
+                html.Div([
+                html.Img(src=recipe_names[2][2], className="polaroid", id="polaroid",
+                         style={'image-width': '100%', 'width':'300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][2],
+                                         href=recipe_names[1][2], id="recipe")]),
+                ],
+                    id='polaroid',style={'margin':'10px','width':'320px'}
+                ),
+
+            ],
+
+            #id='container'
+        ),
+        dbc.Row(
+            [
+
+                html.Div([
+                    html.Img(src=recipe_names[2][3], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][3],
+                                         href=recipe_names[1][3], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px','width':'320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][4], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][4],
+                                         href=recipe_names[1][4], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px','width':'320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][5], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][5],
+                                         href=recipe_names[1][5], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px','width':'320px'}
+                ),
+
+            ],
+
+            # id='container'
+        ),
+    ],
+        #className="polaroid",
+        #id="polaroid",
+
     )
 
-    # Display images of the meals
-    app.images = html.Div(children=[html.Img(src=recipe_names[2][0]),
-                                     html.Img(src=recipe_names[2][1]),
-                                     html.Img(src=recipe_names[2][2]),
-                                     html.Img(src=recipe_names[2][3]),
-                                     html.Img(src=recipe_names[2][4])])
+    # nav = html.Div(
+    #     [
+    #         dbc.Nav(
+    #             [
+    #                 dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
+    #             ]
+    #         ),
+    #         html.Br(),
+    #     ]
+    # )
+
+    # # Display images of the meals
+    # app.images = html.Div(children=[html.Img(src=recipe_names[2][0]),
+    #                                  html.Img(src=recipe_names[2][1]),
+    #                                  html.Img(src=recipe_names[2][2]),
+    #                                  html.Img(src=recipe_names[2][3]),
+    #                                  html.Img(src=recipe_names[2][4])])
 
     # Display a bar chart showing nutritional value of the recipes
     app.bar_chart = html.Div(children=[
@@ -310,6 +405,8 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
                     {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][2], recipe_names[4][2], recipe_names[5][2]], 'type': 'bar', 'name': recipe_names[0][2]},
                     {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][3], recipe_names[4][3], recipe_names[5][3]], 'type': 'bar', 'name': recipe_names[0][3]},
                     {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][4], recipe_names[4][4], recipe_names[5][4]], 'type': 'bar', 'name': recipe_names[0][4]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][5], recipe_names[4][4], recipe_names[5][5]], 'type': 'bar', 'name': recipe_names[0][5]},
+
                 ],
                 'layout': go.Layout(
                     height=350,
@@ -330,8 +427,8 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
         dcc.Graph(
                   id='horizontal_bar_chart',
                   figure={
-                      'data': [go.Bar(x=[recipe_names[6][0], recipe_names[6][1], recipe_names[6][2], recipe_names[6][3], recipe_names[6][4]],
-                                      y=[recipe_names[0][0], recipe_names[0][1], recipe_names[0][2], recipe_names[0][3], recipe_names[0][4]],
+                      'data': [go.Bar(x=[recipe_names[6][0], recipe_names[6][1], recipe_names[6][2], recipe_names[6][3], recipe_names[6][4],recipe_names[6][5]],
+                                      y=[recipe_names[0][0], recipe_names[0][1], recipe_names[0][2], recipe_names[0][3], recipe_names[0][4],recipe_names[0][5]],
                                       orientation='h')],
                       'layout': go.Layout(
                           height=350,
@@ -347,7 +444,7 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
                 )
     ])
 
-    return suggestions, nav, app.images, app.bar_chart, app.horizontal_bar_chart
+    return suggestions,polaroid, app.bar_chart, app.horizontal_bar_chart
 
 
 @app.callback(
@@ -369,7 +466,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     # if len(meal_plan)>= 1:  # then the switch box is switched
     #     recipe_return_value = 100   # meal plan requires maximum number of recipes to be filtered
     # else:
-    recipe_return_value = 5   # normal operation requires top 5 recipes
+    recipe_return_value = 6   # normal operation requires top 5 recipes
 
     ingredients_tot, recipe_names, id_array, source_url, image = spoonacularapi.get_recipes(cuisine_total, diet_out,
                                                                                             value, recipe_return_value)
@@ -380,30 +477,105 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     suggestions = html.Div([
         html.Br(),
 
-        dbc.Alert("See below for the best matches.", color="success", id="check-list"),
+        dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="success", id="check-list"),
     ])
+    polaroid2 = html.Div([
 
-    nav = html.Div(
-        [
-            dbc.Nav(
-                [
-                    dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-                    dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-                    dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-                    dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-                    dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
-                ]
-            ),
-            html.Br(),
-        ]
+        dbc.Row(
+            [
+
+                html.Div([
+                    html.Img(src=recipe_names[2][0], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][0],
+                                         href=recipe_names[1][0], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][1], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][1],
+                                         href=recipe_names[1][1], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][2], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][2],
+                                         href=recipe_names[1][2], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+            ],
+
+            # id='container'
+        ),
+        dbc.Row(
+            [
+
+                html.Div([
+                    html.Img(src=recipe_names[2][3], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][3],
+                                         href=recipe_names[1][3], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][4], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][4],
+                                         href=recipe_names[1][4], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][5], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][5],
+                                         href=recipe_names[1][5], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+            ],
+
+            # id='container'
+        ),
+    ],
+        # className="polaroid",
+        # id="polaroid",
+
     )
 
+    # nav = html.Div(
+    #     [
+    #         dbc.Nav(
+    #             [
+    #                 dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
+    #             ]
+    #         ),
+    #         html.Br(),
+    #     ]
+    # )
+
     # Display images of the meals
-    app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
-                                     html.Img(src=recipe_names[2][1]),
-                                     html.Img(src=recipe_names[2][2]),
-                                     html.Img(src=recipe_names[2][3]),
-                                     html.Img(src=recipe_names[2][4])])
+    # app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
+    #                                  html.Img(src=recipe_names[2][1]),
+    #                                  html.Img(src=recipe_names[2][2]),
+    #                                  html.Img(src=recipe_names[2][3]),
+    #                                  html.Img(src=recipe_names[2][4])])
 
     radioitems = dbc.FormGroup(
         [
@@ -429,7 +601,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
         ]
     )
 
-    return suggestions, nav, app.images, radioitems, button
+    return suggestions, polaroid2, radioitems, button
 
 
 @app.callback(
@@ -452,7 +624,7 @@ def on_meal_planning_click(choice, diet_value, cuisine_value, value):
     unused = ', '.join(unused_ingred)
     cuisine_total, diet_out = spoonacularapi.filters(cuisine_value, diet_value)
 
-    recipe_return_value = 5  # normal operation requires top 5 recipes
+    recipe_return_value = 6  # normal operation requires top 5 recipes
 
     ingredients_tot, recipe_names, id_array, source_url, image = spoonacularapi.get_recipes(cuisine_total, diet_out,
                                                                                             unused, recipe_return_value)
@@ -464,29 +636,99 @@ def on_meal_planning_click(choice, diet_value, cuisine_value, value):
         dbc.Alert("See below for the best matches using the remaining ingredients." + unused, color="success"),
     ])
 
-    nav2 = html.Div(
-        [
-            dbc.Nav(
-                [
-                    dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-                    dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-                    dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-                    dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-                    dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
-                ]
-            ),
-            html.Br(),
-        ]
+    # nav2 = html.Div(
+    #     [
+    #         dbc.Nav(
+    #             [
+    #                 dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
+    #                 dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
+    #             ]
+    #         ),
+    #         html.Br(),
+    #     ]
+    # )
+
+    #
+    polaroid3 = html.Div([
+
+        dbc.Row(
+            [
+
+                html.Div([
+                    html.Img(src=recipe_names[2][0], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][0],
+                                         href=recipe_names[1][0], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][1], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][1],
+                                         href=recipe_names[1][1], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][2], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][2],
+                                         href=recipe_names[1][2], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+            ],
+
+            # id='container'
+        ),
+        dbc.Row(
+            [
+
+                html.Div([
+                    html.Img(src=recipe_names[2][3], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][3],
+                                         href=recipe_names[1][3], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][4], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][4],
+                                         href=recipe_names[1][4], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+                html.Div([
+                    html.Img(src=recipe_names[2][5], className="polaroid", id="polaroid",
+                             style={'image-width': '100%', 'width': '300px', }),
+                    dbc.Nav([dbc.NavLink(recipe_names[0][5],
+                                         href=recipe_names[1][5], id="recipe")]),
+                ],
+                    id='polaroid', style={'margin': '10px', 'width': '320px'}
+                ),
+
+            ],
+
+            # id='container'
+        ),
+    ],
+        # className="polaroid",
+        # id="polaroid",
+
     )
 
-    # Display images of the meals
-    app.images2 = html.Div(children=[html.Img(src=recipe_names[2][0]),
-                                    html.Img(src=recipe_names[2][1]),
-                                    html.Img(src=recipe_names[2][2]),
-                                    html.Img(src=recipe_names[2][3]),
-                                    html.Img(src=recipe_names[2][4])])
-    # print("ended up at the end ")
-    return suggestions2, nav2, app.images2
+    return suggestions2, polaroid3
 
 
 if __name__ == '__main__':
