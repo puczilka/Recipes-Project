@@ -135,7 +135,7 @@ layout_meal_planning = html.Div([
                     html.H1("Meal Planning Tool", className="display-3", style={'color': 'white', 'fontSize': 50}),
                     html.P(
                         "Reduce waste, save time and PlanIt ",
-                        className="lead", id="check-list", style={'color': 'white', 'fontSize': 30}
+                        className="lead", style={'color': 'white', 'fontSize': 30}
                     ),
                     html.Br(),
                     html.P(
@@ -143,7 +143,7 @@ layout_meal_planning = html.Div([
                         className="lead", style={'color': 'white', 'fontSize': 20},
                     ),
                     html.Br(),
-                    dcc.Link('Click here to go back', href='/', target="blank", style={'color': 'white', 'fontSize': 18}),
+                    dcc.Link('Click here to go back', href='/', target="blank", style={'color': 'white', 'fontSize': 20}),
                 ],
                 id="jumbotron",
                 style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%', 'backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left', 'backgroundSize': 'cover'},#, 'position': 'fixed'},
@@ -155,7 +155,7 @@ layout_meal_planning = html.Div([
     ),
 
     dbc.FormGroup([
-        dbc.Alert("Choose Dietary Preferences", color="success", id="check-list"),
+        dbc.Alert("Choose dietary preferences", color="success", id="check-list"),
         dbc.Checklist(
             options=[
                 {"label": "Vegan", "value": 1},
@@ -269,7 +269,7 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
         return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning",
                   id="check-list")
 
-    suggestions = html.Div([
+    suggestions3 = html.Div([
         html.Br(),
         html.Br(),
         dbc.Alert("See below for the best matches.", color="success", id="check-list"),
@@ -391,7 +391,7 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
                 )
     ])
 
-    return suggestions,polaroid, app.bar_chart, app.horizontal_bar_chart
+    return suggestions3, polaroid, app.bar_chart, app.horizontal_bar_chart
 
 
 @app.callback(
@@ -520,7 +520,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
         [
             dbc.Button("Recipe chosen", id="decision-button", color="success", className="mr-2"),
             html.Span(id="example-output", style={"vertical-align": "middle"}),
-            html.Br()
+            html.Br(),
         ]
     )
     html.Br(),
@@ -555,8 +555,12 @@ def on_meal_planning_click(n_clicks, choice, diet_value, cuisine_value, value):
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
     html.Br(),
+    html.Br(),
+    html.Br(),
 
     suggestions2 = html.Div([
+        html.Br(),
+        html.Br(),
         html.Br(),
         dbc.Alert("See below for the best matches using the remaining ingredients: " + unused, color="success", id="check-list"),
     ])
