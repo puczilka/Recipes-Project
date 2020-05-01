@@ -616,14 +616,11 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     button = html.Div(
         [
-<<<<<<< HEAD
+
             dbc.Button("Decision made!", id="decision-button", className="mr-2"),
             html.Span(id="example-output", style={"vertical-align": "middle"}),
             html.Br()
-=======
-            dbc.Button("Decision made!", id="example-button", color="success", className="mr-2"),
-            html.Div(id='container-button-basic', children=''),
->>>>>>> e61794256548a0a661c9b86a0c55f3a7fedd1e89
+
         ]
     )
     html.Br(),
@@ -664,11 +661,9 @@ def on_meal_planning_click(n_clicks, choice, diet_value, cuisine_value, value):
 
     suggestions2 = html.Div([
         html.Br(),
-<<<<<<< HEAD
+
         dbc.Alert("See below for the best matches using the remaining ingredients." + unused, color="light"),
-=======
-        dbc.Alert("See below for the best matches using the remaining ingredients: " + unused, color="success"),
->>>>>>> e61794256548a0a661c9b86a0c55f3a7fedd1e89
+
     ])
 
     # nav2 = html.Div(
