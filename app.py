@@ -271,83 +271,84 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
     # recipe_names = spoonacularapi.retrieve_data(value)
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
+    if len(recipe_names[0]) < 4:
+        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning",
+                  id="check-list")
+
     suggestions = html.Div([
         html.Br(),
         dbc.Alert("See below for the best matches.", color="success", id="check-list"),
     ])
 
-    if len(recipe_names[0]) >= 4:
-        nav = html.Div(
-            [
-                dbc.Nav(
-                    [
-                        dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-                        dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-                        dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-                        dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-                        dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
-                    ]
-                ),
-                html.Br(),
-            ]
+    nav = html.Div(
+        [
+            dbc.Nav(
+                [
+                    dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
+                    dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
+                    dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
+                    dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
+                    dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
+                ]
+            ),
+            html.Br(),
+        ]
+    )
+
+    # Display images of the meals
+    app.images = html.Div(children=[html.Img(src=recipe_names[2][0]),
+                                     html.Img(src=recipe_names[2][1]),
+                                     html.Img(src=recipe_names[2][2]),
+                                     html.Img(src=recipe_names[2][3]),
+                                     html.Img(src=recipe_names[2][4])])
+
+    # Display a bar chart showing nutritional value of the recipes
+    app.bar_chart = html.Div(children=[
+        dcc.Graph(style={'height': '400px', "width": "1100px"},
+            id='bar_chart',
+            figure={
+                'data': [
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][0], recipe_names[4][0], recipe_names[5][0]], 'type': 'bar', 'name': recipe_names[0][0]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][1], recipe_names[4][1], recipe_names[5][1]], 'type': 'bar', 'name': recipe_names[0][1]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][2], recipe_names[4][2], recipe_names[5][2]], 'type': 'bar', 'name': recipe_names[0][2]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][3], recipe_names[4][3], recipe_names[5][3]], 'type': 'bar', 'name': recipe_names[0][3]},
+                    {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][4], recipe_names[4][4], recipe_names[5][4]], 'type': 'bar', 'name': recipe_names[0][4]},
+                ],
+                'layout': go.Layout(
+                    height=350,
+                    width=1100,
+                    yaxis_title="Amount (g)",
+                    title="Comparison of nutritional values between the recipes",
+                    margin=dict(
+                        b=50,
+                        r=50,
+                    ),
+                )
+            }
         )
+    ])
 
-        # Display images of the meals
-        app.images = html.Div(children=[html.Img(src=recipe_names[2][0]),
-                                         html.Img(src=recipe_names[2][1]),
-                                         html.Img(src=recipe_names[2][2]),
-                                         html.Img(src=recipe_names[2][3]),
-                                         html.Img(src=recipe_names[2][4])])
-
-        # Display a bar chart showing nutritional value of the recipes
-        app.bar_chart = html.Div(children=[
-            dcc.Graph(style={'height': '400px', "width": "1100px"},
-                id='bar_chart',
-                figure={
-                    'data': [
-                        {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][0], recipe_names[4][0], recipe_names[5][0]], 'type': 'bar', 'name': recipe_names[0][0]},
-                        {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][1], recipe_names[4][1], recipe_names[5][1]], 'type': 'bar', 'name': recipe_names[0][1]},
-                        {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][2], recipe_names[4][2], recipe_names[5][2]], 'type': 'bar', 'name': recipe_names[0][2]},
-                        {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][3], recipe_names[4][3], recipe_names[5][3]], 'type': 'bar', 'name': recipe_names[0][3]},
-                        {'x': ["Fat", "Carbohydrates", "Protein"], 'y': [recipe_names[3][4], recipe_names[4][4], recipe_names[5][4]], 'type': 'bar', 'name': recipe_names[0][4]},
-                    ],
-                    'layout': go.Layout(
-                        height=350,
-                        width=1100,
-                        yaxis_title="Amount (g)",
-                        title="Comparison of nutritional values between the recipes",
-                        margin=dict(
-                            b=50,
-                            r=50,
-                        ),
-                    )
-                }
-            )
-        ])
-
-        # Display a horizontal bar chart showing calories
-        app.horizontal_bar_chart = html.Div([
-            dcc.Graph(
-                      id='horizontal_bar_chart',
-                      figure={
-                          'data': [go.Bar(x=[recipe_names[6][0], recipe_names[6][1], recipe_names[6][2], recipe_names[6][3], recipe_names[6][4]],
-                                          y=[recipe_names[0][0], recipe_names[0][1], recipe_names[0][2], recipe_names[0][3], recipe_names[0][4]],
-                                          orientation='h')],
-                          'layout': go.Layout(
-                              height=350,
-                              width=1100,
-                              xaxis_title="Calories (kcal)",
-                              title="Calories comparison between recipes",
-                              margin=dict(
-                                  l=350,
-                                  t=50,
-                              ),
+    # Display a horizontal bar chart showing calories
+    app.horizontal_bar_chart = html.Div([
+        dcc.Graph(
+                  id='horizontal_bar_chart',
+                  figure={
+                      'data': [go.Bar(x=[recipe_names[6][0], recipe_names[6][1], recipe_names[6][2], recipe_names[6][3], recipe_names[6][4]],
+                                      y=[recipe_names[0][0], recipe_names[0][1], recipe_names[0][2], recipe_names[0][3], recipe_names[0][4]],
+                                      orientation='h')],
+                      'layout': go.Layout(
+                          height=350,
+                          width=1100,
+                          xaxis_title="Calories (kcal)",
+                          title="Calories comparison between recipes",
+                          margin=dict(
+                              l=350,
+                              t=50,
                           ),
-                      }
-                    )
-        ])
-    else:
-        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning", id="check-list")
+                      ),
+                  }
+                )
+    ])
 
     return suggestions, nav, app.images, app.bar_chart, app.horizontal_bar_chart
 
@@ -379,64 +380,64 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     # recipe_names = spoonacularapi.retrieve_data(value)
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
+    if len(recipe_names[0]) < 4:
+        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning",
+                  id="check-list")
+
     suggestions = html.Div([
         html.Br(),
 
         dbc.Alert("See below for the best matches", color="success", id="check-list"),
     ])
 
-    if len(recipe_names[0]) >= 4:
-        nav = html.Div(
-            [
-                dbc.Nav(
-                    [
-                        dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-                        dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-                        dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-                        dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-                        dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
-                    ]
-                ),
-                html.Br(),
-            ]
-        )
+    nav = html.Div(
+        [
+            dbc.Nav(
+                [
+                    dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
+                    dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
+                    dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
+                    dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
+                    dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
+                ]
+            ),
+            html.Br(),
+        ]
+    )
 
-        # Display images of the meals
-        app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
-                                         html.Img(src=recipe_names[2][1]),
-                                         html.Img(src=recipe_names[2][2]),
-                                         html.Img(src=recipe_names[2][3]),
-                                         html.Img(src=recipe_names[2][4])])
+    # Display images of the meals
+    app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
+                                     html.Img(src=recipe_names[2][1]),
+                                     html.Img(src=recipe_names[2][2]),
+                                     html.Img(src=recipe_names[2][3]),
+                                     html.Img(src=recipe_names[2][4])])
 
-        radioitems = dbc.FormGroup(
-            [
-                html.Br(),
-                dbc.Alert("Choose one recipe", color="success", id="check-list"),
-                dbc.RadioItems(
-                    options=[
-                        {"label": '"' + recipe_names[0][0]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]), "value": ingredients_tot[0]},
-                        {"label": '"' + recipe_names[0][1]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[1]), "value": ingredients_tot[1]},
-                        {"label": '"' + recipe_names[0][2]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[2]), "value": ingredients_tot[2]},
-                        {"label": '"' + recipe_names[0][3]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[3]), "value": ingredients_tot[3]},
-                        {"label": '"' + recipe_names[0][4]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[4]), "value": ingredients_tot[4]},
-                    ],
-                    value=[],
-                    id="radioitems-choice-1",
-                ),
-            ]
-        )
-        html.Br(),
+    radioitems = dbc.FormGroup(
+        [
+            html.Br(),
+            dbc.Alert("Choose one recipe", color="success", id="check-list"),
+            dbc.RadioItems(
+                options=[
+                    {"label": '"' + recipe_names[0][0]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]), "value": ingredients_tot[0]},
+                    {"label": '"' + recipe_names[0][1]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[1]), "value": ingredients_tot[1]},
+                    {"label": '"' + recipe_names[0][2]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[2]), "value": ingredients_tot[2]},
+                    {"label": '"' + recipe_names[0][3]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[3]), "value": ingredients_tot[3]},
+                    {"label": '"' + recipe_names[0][4]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[4]), "value": ingredients_tot[4]},
+                ],
+                value=[],
+                id="radioitems-choice-1",
+            ),
+        ]
+    )
+    html.Br(),
 
-        button = html.Div(
-            [
-                dbc.Button("Decision made!", id="example-button", color="success", className="mr-2"),
-                html.Div(id='container-button-basic', children=''),
-            ]
-        )
-        html.Br(),
-
-    else:
-        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning", id="check-list")
+    button = html.Div(
+        [
+            dbc.Button("Decision made!", id="example-button", color="success", className="mr-2"),
+            html.Div(id='container-button-basic', children=''),
+        ]
+    )
+    html.Br(),
 
     return suggestions, nav, app.images, radioitems, button
 
