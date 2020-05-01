@@ -137,7 +137,7 @@ layout_meal_planning = html.Div([
                         "Generate your meal plan by typing in at least 10 ingredients",
                         className="lead", style={'color': 'white', 'fontSize': 20},
                     ),
-
+                    html.Br(),
                     dcc.Link('Click here to go back', href='/', target="blank", style={'color': 'white', 'fontSize': 18}),
                 ],
                 id="jumbotron",
@@ -590,27 +590,32 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     radioitems = dbc.FormGroup(
         [
-            html.Br(),
-            dbc.Alert("Choose one recipe", color="success", id="check-list"),
+            dbc.Label("Choose one recipe"),
             dbc.RadioItems(
                 options=[
-                    {"label": '"' + recipe_names[0][0]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]), "value": ingredients_tot[0]},
-                    {"label": '"' + recipe_names[0][1]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[1]), "value": ingredients_tot[1]},
-                    {"label": '"' + recipe_names[0][2]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[2]), "value": ingredients_tot[2]},
-                    {"label": '"' + recipe_names[0][3]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[3]), "value": ingredients_tot[3]},
-                    {"label": '"' + recipe_names[0][4]+'"' + " uses the ingredients: " + ', '.join(ingredients_tot[4]), "value": ingredients_tot[4]},
+                    {"label": '"' + recipe_names[0][0] + '"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]),
+                     "value": ingredients_tot[0]},
+                    {"label": '"' + recipe_names[0][1] + '"' + " uses the ingredients: " + ', '.join(ingredients_tot[1]),
+                     "value": ingredients_tot[1]},
+                    {"label": '"' + recipe_names[0][2] + '"' + " uses the ingredients: " + ', '.join(ingredients_tot[2]),
+                     "value": ingredients_tot[2]},
+                    {"label": '"' + recipe_names[0][3] + '"' + " uses the ingredients: " + ', '.join(ingredients_tot[3]),
+                     "value": ingredients_tot[3]},
+                    {"label": '"' + recipe_names[0][4] + '"' + " uses the ingredients: " + ', '.join(ingredients_tot[4]),
+                     "value": ingredients_tot[4]},
                 ],
                 value=[],
                 id="radioitems-choice-1",
             ),
         ]
     )
+
     html.Br(),
 
     button = html.Div(
         [
             dbc.Button("Decision made!", id="example-button", color="success", className="mr-2"),
-            html.Div(id='container-button-basic', children=''),
+            html.Span(id="example-output", style={"vertical-align": "middle"}),
         ]
     )
     html.Br(),
@@ -619,7 +624,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
 
 @app.callback(
-    dash.dependencies.Output("container-button-basic", "children"),
+    dash.dependencies.Output("example-output", "children"),
     [
         dash.dependencies.Input("radioitems-choice-1", "value"),
         dash.dependencies.Input("checklist-input-diet2", "value"),
