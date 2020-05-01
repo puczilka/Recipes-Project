@@ -52,15 +52,12 @@ app_layout = html.Div([
                     dcc.Link('Click here to go to Meal Planning', href='/meal-planning', target="blank", id="navigate", style={'color': 'white', 'fontSize': 20})
                 ],
                 id="jumbotron",
-                #style={'backgroundImage': 'url(https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg)', 'background-size': '100%','max-width': '100%','height': '100%', 'backgroundRepeat': 'no-repeat', 'backgroundPosition': 'left'},# 'backgroundSize': 'cover'},#, 'position': 'fixed'},
                 fluid=True,
             )
         ],
         fluid=True,
         id="jumbotronBoxmain",
     ),
-
-    #dbc.Alert("Type in your ingredients and select preferences.", id="check-list"),
 
     dbc.FormGroup([
         dbc.Label("Choose Dietary Preferences", id="check-list"),
@@ -119,9 +116,13 @@ app_layout = html.Div([
         html.Div(
             dcc.Input(id='input-on-submit1', placeholder="Type in your ingredients separated by comma...", type='text',
                       style={'width': '50%', 'display':'inline-block'})), dbc.Button('Submit', id='submit-val', n_clicks=0),
+
+        html.Br(),
+
         html.Div(id='container-button-basic', style={'display':'inline-block'}, children=''),
     ])
 ])
+
 layout_meal_planning = html.Div([
     dbc.Jumbotron(
         [
@@ -148,10 +149,6 @@ layout_meal_planning = html.Div([
         fluid=True,
         id="jumbotronBoxplan",
     ),
-
-
-    #dbc.Alert("Type in 10 ingredients below to generate a Meal Plan!", color="success", id="check-list"),
-
 
     html.Br(),
 
@@ -212,15 +209,14 @@ layout_meal_planning = html.Div([
             dcc.Input(id='input-on-submit2', placeholder="Type in your ingredients separated by comma...", type='text',
                       style={'width': '50%'})),
 
-        dbc.Button('Submit', color="success", id='submit-val2', n_clicks=0),
+        dbc.Button('Submit', id='submit-val2', n_clicks=0),
+        html.Br(),
+        html.Br(),
         html.Div(id='container-button-meal-plan', children=''),
 
-        html.Br(),
-        dcc.Link('Go back', href='/', target="blank"),
+        dcc.Link('Click here to go back', href='/', target="blank"),
     ])
 ])
-
-# Layout of the /meal-planning page
 
 
 def serve_layout():
@@ -254,17 +250,12 @@ def display_page(pathname):
     [dash.dependencies.State('input-on-submit1', 'value')]
 )
 def on_submit_click(n_clicks, diet_value, cuisine_value, value):
-    # print("hello world", diet_value, cuisine_value, value)# meal_plan)
 
-    # Added because otherwise a random recipe was displayed on the website BEFORE submit button was pressed
     if value == None:
         return
 
     cuisine_total, diet_out = spoonacularapi.filters(cuisine_value, diet_value)
 
-    # if len(meal_plan)>= 1:  # then the switch box is switched
-    #     recipe_return_value = 100   # meal plan requires maximum number of recipes to be filtered
-    # else:
     recipe_return_value = 6   # normal operation requires top 5 recipes
 
     ingredients_tot, recipe_names, id_array, source_url, image = spoonacularapi.get_recipes(cuisine_total, diet_out, value, recipe_return_value)
@@ -278,30 +269,13 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches.", color="dark", id="check-list"),
+        html.Br(),
+        dbc.Alert("See below for the best matches.", color="light", id="check-list"),
     ])
 
-    # polaroid=html.Div([
-    #
-    #     # dbc.Container(
-    #     #     [
-    #
-    #             html.Img(src=recipe_names[2][0], className="polaroid", id="polaroid",
-    #                      style={'image-width': '100%', 'width':'300px', }),
-    #             html.P('image 1', ),
-    #         # ],
-    #         # id='container'
-    #     # ),
-    #
-    # ],
-    #     className="polaroid",
-    #     id="polaroid",
-    # )
     polaroid = html.Div([
-
         dbc.Row(
             [
-
                 html.Div([
                 html.Img(src=recipe_names[2][0], className="polaroid", id="polaroid",
                          style={'image-width': '100%', 'width':'300px', }),
@@ -310,8 +284,6 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
                 ],
                     id='polaroid', style={'margin':'10px','width':'320px'}
                 ),
-
-
 
                 html.Div([
                 html.Img(src=recipe_names[2][1], className="polaroid", id="polaroid",
@@ -322,8 +294,6 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
                     id='polaroid',style={'margin':'10px', 'width':'320px'}
                 ),
 
-
-
                 html.Div([
                 html.Img(src=recipe_names[2][2], className="polaroid", id="polaroid",
                          style={'image-width': '100%', 'width':'300px', }),
@@ -332,14 +302,12 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
                 ],
                     id='polaroid',style={'margin':'10px','width':'320px'}
                 ),
-
             ],
 
-            #id='container'
         ),
+
         dbc.Row(
             [
-
                 html.Div([
                     html.Img(src=recipe_names[2][3], className="polaroid", id="polaroid",
                              style={'image-width': '100%', 'width': '300px', }),
@@ -366,40 +334,12 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
                 ],
                     id='polaroid', style={'margin': '10px','width':'320px'}
                 ),
-
             ],
 
-            # id='container'
         ),
     ],
-        #className="polaroid",
-        #id="polaroid",
-
     )
 
-    # nav = html.Div(
-    #     [
-    #         dbc.Nav(
-    #             [
-    #                 dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
-    #             ]
-    #         ),
-    #         html.Br(),
-    #     ]
-    # )
-
-    # # Display images of the meals
-    # app.images = html.Div(children=[html.Img(src=recipe_names[2][0]),
-    #                                  html.Img(src=recipe_names[2][1]),
-    #                                  html.Img(src=recipe_names[2][2]),
-    #                                  html.Img(src=recipe_names[2][3]),
-    #                                  html.Img(src=recipe_names[2][4])])
-
-    # Display a bar chart showing nutritional value of the recipes
     app.bar_chart = html.Div(children=[
         dcc.Graph(style={'height': '400px', "width": "1100px"},
             id='bar_chart',
@@ -460,17 +400,12 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
     [dash.dependencies.State('input-on-submit2', 'value')]
 )
 def on_click(n_clicks, diet_value, cuisine_value, value):
-    # print("hello world", diet_value,cuisine_value)#, meal_plan)
-
     # Added because otherwise a random recipe was displayed on the website BEFORE submit button was pressed
     if value == None:
         return
 
     cuisine_total, diet_out= spoonacularapi.filters(cuisine_value, diet_value)
-    # print(cuisine_total, diet_out, value, "inputs to api")
-    # if len(meal_plan)>= 1:  # then the switch box is switched
-    #     recipe_return_value = 100   # meal plan requires maximum number of recipes to be filtered
-    # else:
+
     recipe_return_value = 6   # normal operation requires top 5 recipes
 
     ingredients_tot, recipe_names, id_array, source_url, image = spoonacularapi.get_recipes(cuisine_total, diet_out,
@@ -485,16 +420,13 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-
-
-        dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="success", id="check-list"),
-
+        dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="light", id="check-list"),
+        html.Br(),
     ])
-    polaroid2 = html.Div([
 
+    polaroid2 = html.Div([
         dbc.Row(
             [
-
                 html.Div([
                     html.Img(src=recipe_names[2][0], className="polaroid", id="polaroid",
                              style={'image-width': '100%', 'width': '300px', }),
@@ -521,14 +453,11 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
                 ],
                     id='polaroid', style={'margin': '10px', 'width': '320px'}
                 ),
-
             ],
-
-            # id='container'
         ),
+
         dbc.Row(
             [
-
                 html.Div([
                     html.Img(src=recipe_names[2][3], className="polaroid", id="polaroid",
                              style={'image-width': '100%', 'width': '300px', }),
@@ -555,42 +484,15 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
                 ],
                     id='polaroid', style={'margin': '10px', 'width': '320px'}
                 ),
-
             ],
 
-            # id='container'
         ),
     ],
-        # className="polaroid",
-        # id="polaroid",
-
     )
-
-    # nav = html.Div(
-    #     [
-    #         dbc.Nav(
-    #             [
-    #                 dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
-    #             ]
-    #         ),
-    #         html.Br(),
-    #     ]
-    # )
-
-    # Display images of the meals
-    # app.images = html.Div(children=[ html.Img(src=recipe_names[2][0]),
-    #                                  html.Img(src=recipe_names[2][1]),
-    #                                  html.Img(src=recipe_names[2][2]),
-    #                                  html.Img(src=recipe_names[2][3]),
-    #                                  html.Img(src=recipe_names[2][4])])
 
     radioitems = dbc.FormGroup(
         [
-            dbc.Label("Choose one recipe"),
+            dbc.Alert("Choose one recipe", color="success"),
             dbc.RadioItems(
                 options=[
                     {"label": '"' + recipe_names[0][0] + '"' + " uses the ingredients: " + ', '.join(ingredients_tot[0]),
@@ -614,8 +516,9 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     button = html.Div(
         [
-            dbc.Button("Decision made!", id="example-button", color="success", className="mr-2"),
+            dbc.Button("Recipe chosen", id="decision-button", color="success", className="mr-2"),
             html.Span(id="example-output", style={"vertical-align": "middle"}),
+            html.Br()
         ]
     )
     html.Br(),
@@ -626,17 +529,16 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 @app.callback(
     dash.dependencies.Output("example-output", "children"),
     [
+        dash.dependencies.Input("decision-button", "n_clicks"),
         dash.dependencies.Input("radioitems-choice-1", "value"),
         dash.dependencies.Input("checklist-input-diet2", "value"),
         dash.dependencies.Input("checklist-input-cuisine2", "value")
     ],
     [dash.dependencies.State('input-on-submit2', 'value')]
 )
-def on_meal_planning_click(choice, diet_value, cuisine_value, value):
-    # print(choice, type(choice), value)
+def on_meal_planning_click(n_clicks, choice, diet_value, cuisine_value, value):
 
-    # Added because otherwise a random recipe was displayed on the website BEFORE submit button was pressed
-    if value == None:
+    if n_clicks is None:
         return
 
     unused_ingred = spoonacularapi.unused_ingr(value, choice)
@@ -650,32 +552,19 @@ def on_meal_planning_click(choice, diet_value, cuisine_value, value):
 
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
+    html.Br(),
+
     suggestions2 = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches using the remaining ingredients: " + unused, color="success"),
+
+        dbc.Alert("See below for the best matches using the remaining ingredients: " + unused, color="light"),
+
     ])
 
-    # nav2 = html.Div(
-    #     [
-    #         dbc.Nav(
-    #             [
-    #                 dbc.NavLink(recipe_names[0][0], href=recipe_names[1][0], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][1], href=recipe_names[1][1], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][2], href=recipe_names[1][2], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][3], href=recipe_names[1][3], id="recipe"),
-    #                 dbc.NavLink(recipe_names[0][4], href=recipe_names[1][4], id="recipe")
-    #             ]
-    #         ),
-    #         html.Br(),
-    #     ]
-    # )
-
-    #
     polaroid3 = html.Div([
 
         dbc.Row(
             [
-
                 html.Div([
                     html.Img(src=recipe_names[2][0], className="polaroid", id="polaroid",
                              style={'image-width': '100%', 'width': '300px', }),
@@ -702,14 +591,11 @@ def on_meal_planning_click(choice, diet_value, cuisine_value, value):
                 ],
                     id='polaroid', style={'margin': '10px', 'width': '320px'}
                 ),
-
             ],
-
-            # id='container'
         ),
+
         dbc.Row(
             [
-
                 html.Div([
                     html.Img(src=recipe_names[2][3], className="polaroid", id="polaroid",
                              style={'image-width': '100%', 'width': '300px', }),
@@ -736,15 +622,10 @@ def on_meal_planning_click(choice, diet_value, cuisine_value, value):
                 ],
                     id='polaroid', style={'margin': '10px', 'width': '320px'}
                 ),
-
             ],
 
-            # id='container'
         ),
     ],
-        # className="polaroid",
-        # id="polaroid",
-
     )
 
     return suggestions2, polaroid3
