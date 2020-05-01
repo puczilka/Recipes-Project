@@ -119,10 +119,9 @@ app_layout = html.Div([
         dbc.Button('Submit', id='submit-val', n_clicks=0),
 
         html.Br(),
+        html.Br(),
 
         html.Div(id='container-button-basic', style={'display':'inline-block'}, children=''),
-        html.Br(),
-        html.Br(),
         html.Br(),
     ])
 ])
@@ -264,9 +263,8 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
 
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
-    if len(recipe_names[0]) < 4:
-        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning",
-                  id="check-list")
+    if len(recipe_names[0]) < 5:
+        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning")
 
     suggestions3 = html.Div([
         html.Br(),
@@ -415,9 +413,8 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
     # recipe_names = spoonacularapi.retrieve_data(value)
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
-    if len(recipe_names[0]) < 4:
-        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning",
-                  id="check-list")
+    if len(recipe_names[0]) < 5:
+        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning")
 
     suggestions = html.Div([
         html.Br(),
@@ -556,6 +553,9 @@ def on_meal_planning_click(n_clicks, choice, diet_value, cuisine_value, value):
     html.Br(),
     html.Br(),
     html.Br(),
+
+    if len(recipe_names[0]) < 5:
+        return dbc.Alert("Try typing in different ingredients as no results have been found.", color="warning")
 
     suggestions2 = html.Div([
         html.Br(),
