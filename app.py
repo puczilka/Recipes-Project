@@ -215,7 +215,7 @@ layout_meal_planning = html.Div([
         html.Br(),
         html.Br(),
         html.Div(id='container-button-meal-plan', children=''),
-
+        html.Br(),
         dcc.Link('Click here to go back', href='/', target="blank"),
     ])
 ])
@@ -422,7 +422,7 @@ def on_click(n_clicks, diet_value, cuisine_value, value):
 
     suggestions = html.Div([
         html.Br(),
-        dbc.Alert("See below for the best matches, click on the recipe names for the recipe.", color="success", id="check-list"),
+        dbc.Alert("See below for the best matches. Click on the recipe name for the recipe.", color="success", id="check-list"),
     ])
 
     polaroid2 = html.Div([
