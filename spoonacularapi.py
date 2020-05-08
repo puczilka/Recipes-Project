@@ -90,7 +90,7 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
 
     headers = {
         'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-        'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d"
+        'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01"
         }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
@@ -293,7 +293,7 @@ def complete_search(to_complete): # produces variants on one ingredients so that
 
     headers = {
         'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-        'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d"
+        'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01"
     }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
@@ -356,7 +356,7 @@ def retrieve_data(value):
 
     headers = {
         'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-        'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
+        'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01",
     }
 
     response1 = requests.request("GET", url, headers=headers, params=querystring)
@@ -372,7 +372,7 @@ def get_name_url_nutrients(ids,titles,url_links,images, value):
 
     headers = {
         'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-        'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
+        'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01",
     }
 
     #titles = []
