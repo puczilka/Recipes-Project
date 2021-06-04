@@ -3,7 +3,6 @@ import json
 from collections import Counter
 import re
 import os
-from dotenv import load_dotenv
 
 
 def filters(cuisine, diet_value):
@@ -90,17 +89,16 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
 
     # querystring = {"query":"burger","cuisine":"american","number":"10"}
 
-    load_dotenv()
     API_KEY = os.getenv('PROJECT_API_KEY')
     print(API_KEY)
     headers = {
         'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-        'x-rapidapi-key': API_KEY
+        'x-rapidapi-key': API_KEY,
         }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
-    options_json=response.json()
-
+    options_json = response.json()
+    print(options_json)
     # print(response.text)
     print(options_json['results'])
 
@@ -287,7 +285,7 @@ def retrieve_data(value, diet, meal_type):
 
         headers = {
             'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-            'x-rapidapi-key': "d45238ae20msh376b8f66f8e8231p1926eejsn4551d8c0da01"
+            'x-rapidapi-key': API_KEY
         }
 
         response1 = requests.request("GET", url, headers=headers, params=querystring)
@@ -313,7 +311,7 @@ def retrieve_data(value, diet, meal_type):
 
         headers = {
             'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-            'x-rapidapi-key': "51d5225cf3msh3beb5dacf075161p1812b2jsnba32bca5162d",
+            'x-rapidapi-key': API_KEY,
         }
 
         response1 = requests.request("GET", url, headers=headers, params=querystring)

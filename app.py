@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 from random import randint
 import dash
@@ -8,6 +10,8 @@ import spoonacularapi
 import plotly.graph_objs as go
 import flask
 from dash.dependencies import Input, Output
+
+#print(os.getenv('PROJECT_API_KEY'))
 
 
 server = flask.Flask(__name__)
@@ -260,15 +264,11 @@ def on_submit_click(n_clicks, diet_value, cuisine_value, value):
         return
 
     cuisine_total, diet_out = spoonacularapi.filters(cuisine_value, diet_value)
-
-    # if len(meal_plan)>= 1:  # then the switch box is switched
-    #     recipe_return_value = 100   # meal plan requires maximum number of recipes to be filtered
-    # else:
     recipe_return_value = 5   # normal operation requires top 5 recipes
 
     ingredients_tot, recipe_names, id_array, source_url, image = spoonacularapi.get_recipes(cuisine_total, diet_out, value, recipe_return_value)
 
-    # recipe_names = spoonacularapi.retrieve_data(value)
+
     recipe_names = spoonacularapi.get_name_url_nutrients(id_array, recipe_names, source_url, image, value)
 
     suggestions = html.Div([
