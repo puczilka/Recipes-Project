@@ -69,7 +69,8 @@ def filters(cuisine, diet_value):
 
 
 def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
-    url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex"
+    #url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/searchComplex"
+    url = "https://api.spoonacular.com/recipes/complexSearch"
     print(ingredients, recipe_return_value)
     # querystring = {"includeIngredients":"onions%2Clettuce%2Ctomato","instructionsRequired":"true", "addRecipeInformation":"false","ranking":"1",
     #               "sort":"max-used-ingredients","sortDirection": "desc","limitLicense":"false","offset":"0","number":"50"}
@@ -92,15 +93,13 @@ def get_recipes(cuisine_in, diet_in, ingredients, recipe_return_value):
     API_KEY = os.getenv('PROJECT_API_KEY')
     print(API_KEY)
     headers = {
-        'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
-        'x-rapidapi-key': API_KEY,
+        #'x-rapidapi-host': "spoonacular-recipe-food-nutrition-v1.p.rapidapi.com",
+        #'x-rapidapi-key': API_KEY,
+        'apiKey' : API_KEY
         }
 
     response = requests.request("GET", url, headers=headers, params=querystring)
     options_json = response.json()
-    print(options_json)
-    # print(response.text)
-    print(options_json['results'])
 
     ingredients_tot = []
     title_array = []
